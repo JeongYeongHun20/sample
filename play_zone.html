@@ -98,6 +98,23 @@
             <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Left Canvas Area -->
                 <div class="lg:col-span-8 space-y-4">
+                    <!-- Premium Scoreboard HUD -->
+                    <div class="bg-billiard-cloth/40 border border-billiard-gold/30 p-4 rounded-2xl shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-billiard-gold text-billiard-deep rounded-full flex items-center justify-center font-bold font-serif text-lg shadow-[0_0_12px_rgba(212,175,55,0.4)]">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium">Training Score</span>
+                                <span id="html-score-val" class="text-xl font-bold font-mono text-billiard-ivory">0 점</span>
+                            </div>
+                        </div>
+                        <div class="w-full sm:flex-1 max-w-md bg-billiard-deep/50 border border-billiard-bright/40 px-4 py-2.5 rounded-xl text-center sm:text-left">
+                            <span class="block text-[9px] text-billiard-gold uppercase tracking-wider font-semibold mb-0.5"><i class="fa-solid fa-circle-info mr-1"></i> 실시간 상태 (Status)</span>
+                            <p id="html-status-text" class="text-xs text-gray-300 font-medium">배치 준비 완료! 수구를 드래그해 샷을 성공시키세요.</p>
+                        </div>
+                    </div>
+
                     <div class="relative border-[16px] md:border-[20px] border-amber-950 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden">
                         <div class="absolute inset-0 border-[8px] border-billiard-deep/30 pointer-events-none z-10"></div>
                         <div class="billiard-cloth relative">
@@ -407,6 +424,14 @@
         let hasHitOpponent = false;
         let shotStatusText = "내 공(흰 공)을 드래그하여 목표 배치를 해결해보세요.";
 
+        // Scoreboard DOM Updater Helper
+        function updateScoreboardDOM() {
+            const scoreEl = document.getElementById('html-score-val');
+            const statusEl = document.getElementById('html-status-text');
+            if (scoreEl) scoreEl.textContent = `${score} 점`;
+            if (statusEl) statusEl.textContent = shotStatusText;
+        }
+
         const LAYOUT_DATABASE = {
             beginner: [
                 {
@@ -643,6 +668,8 @@
             hasHitRed2 = false;
             hasHitOpponent = false;
             shotStatusText = "배치 준비 완료! 수구를 드래그해 샷을 성공시키세요.";
+            
+            updateScoreboardDOM();
         }
 
         function checkCollisions() {
@@ -804,13 +831,13 @@
                 hasHitRed2 = false;
                 hasHitOpponent = false;
                 shotStatusText = "분석 진행 중...";
+                updateScoreboardDOM();
                 playCollisionSound(speed);
             }
         });
 
-        // Touch handlers matching window logic
-        canvas.addEventListener('touchstart', (evt) => {
-            initAudio();
+        // Touch support
+        canvas.addEventListener('touchstart', (e) => {
             const pos = getCanvasMousePos(evt);
             const cue = balls[0];
             const dx = pos.x - cue.x;
@@ -861,6 +888,7 @@
                 hasHitRed2 = false;
                 hasHitOpponent = false;
                 shotStatusText = "분석 진행 중...";
+                updateScoreboardDOM();
                 playCollisionSound(speed);
             }
         });
@@ -878,6 +906,7 @@
                 shotStatusText = "😢 실패. 정석 가이드라인의 당점과 힘 조절을 참고해보세요.";
                 showToast('실패 😢', '아쉽게도 두 개의 적구를 다 맞추지 못했습니다.');
             }
+            updateScoreboardDOM();
         }
 
         function resizeCanvas() {
@@ -994,21 +1023,6 @@
                     evaluateShot();
                 }
             }
-
-            ctx.fillStyle = 'rgba(5, 24, 17, 0.9)';
-            ctx.fillRect(15, 15, 300, 55);
-            ctx.strokeStyle = '#d4af37';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(15, 15, 300, 55);
-
-            ctx.fillStyle = '#fbfaf5';
-            ctx.font = 'bold 13px Inter, Noto Sans KR';
-            ctx.textAlign = 'left';
-            ctx.fillText(`CUE SCORE: ${score} 점`, 25, 35);
-
-            ctx.font = '10px Inter, Noto Sans KR';
-            ctx.fillStyle = '#a0aec0';
-            ctx.fillText(shotStatusText, 25, 55);
 
             requestAnimationFrame(animate);
         }
