@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>완벽한 한 큐 - 명예의 전당</title>
+    <title>완벽한 한 큐 - 당구게임</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -39,82 +39,268 @@
             }
         }
     </script>
-</head>
-<body class="bg-billiard-deep text-billiard-ivory font-sans overflow-x-hidden min-h-screen flex flex-col justify-between">
 
-    <!-- LEADERBOARD MAIN CONTENT -->
-    <section class="py-32 flex-1 flex items-center">
-        <div class="max-w-4xl mx-auto px-6 w-full">
+    <style>
+        .billiard-cloth {
+            background-color: #0b3c26;
+            background-image: radial-gradient(#145839 1px, transparent 1px), radial-gradient(#145839 1px, transparent 1px);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
+        }
+
+        /* Hide scrollbars for chrome/safari/opera while maintaining scrolling capability */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbars for ie/edge/firefox */
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-billiard-deep text-billiard-ivory font-sans overflow-x-hidden">
+
+    <!-- INTERACTIVE GAME ZONE -->
+    <section class="py-32 bg-billiard-deep">
+        <div class="max-w-6xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-12 space-y-4">
-                <span class="text-billiard-gold font-serif italic text-lg block">Hall of Fame</span>
-                <h2 class="text-3xl md:text-5xl font-bold font-serif tracking-tight">명예의 전당 실시간 랭킹</h2>
+                <span class="text-billiard-gold font-serif italic text-lg">Interactive Training</span>
+                <h2 class="text-3xl md:text-4xl font-bold font-serif">당구 수지별 4구 정석 배치 훈련소</h2>
                 <p class="text-gray-300 text-sm md:text-base">
-                    정밀 타격 훈련소 10회 도전을 완벽하게 클리어한 실력파 랭커들의 기록 보드입니다. 높은 점수를 획득하여 상위 랭크를 점령해 보세요!
+                    자신의 평소 당구 수지(핸디캡)를 선택하고 맞춤 연습 배치를 해결해보세요! 총 3번의 실패 기회가 주어지며, 정석 해설을 읽어보고 가이드라인을 따라가며 완벽한 각도의 알고리즘을 설계해 봅니다.
                 </p>
             </div>
 
-            <!-- LEADERBOARD PANEL -->
-            <div class="bg-billiard-cloth/30 border border-billiard-bright/50 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
-                <div class="absolute -top-12 -right-12 w-48 h-48 bg-billiard-gold/10 rounded-full blur-[60px] pointer-events-none"></div>
+            <!-- HANDICAP & LAYOUT SELECTION PANEL -->
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <!-- Handicap Choice -->
+                <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-4 rounded-xl flex flex-col justify-between">
+                    <label class="block text-xs font-bold text-billiard-gold uppercase tracking-widest mb-2"><i class="fa-solid fa-trophy mr-1.5"></i> 나의 당구 수지</label>
+                    <select id="handicap-select" class="w-full bg-billiard-deep text-billiard-ivory py-2.5 px-3 rounded-lg border border-billiard-gold/40 focus:outline-none focus:border-billiard-gold transition-colors text-sm">
+                        <option value="beginner">초급자 (수지 80 - 120)</option>
+                        <option value="intermediate" selected>중급자 (수지 150 - 250)</option>
+                        <option value="advanced">상급자 (수지 300 이상)</option>
+                    </select>
+                </div>
 
-                <!-- FILTER CONTROLS -->
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pb-6 border-b border-billiard-bright/40">
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="filterRankings('all')" id="filter-all-btn" class="px-4 py-2 bg-billiard-gold text-billiard-deep font-bold rounded-lg text-xs transition-all">전체</button>
-                        <button onclick="filterRankings('초급자')" id="filter-beg-btn" class="px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all">초급자</button>
-                        <button onclick="filterRankings('중급자')" id="filter-int-btn" class="px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all">중급자</button>
-                        <button onclick="filterRankings('상급자')" id="filter-adv-btn" class="px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all">상급자</button>
+                <!-- Preset Layouts Choice -->
+                <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-4 rounded-xl flex flex-col justify-between">
+                    <label class="block text-xs font-bold text-billiard-gold uppercase tracking-widest mb-2"><i class="fa-solid fa-map-pin mr-1.5"></i> 연습용 배치 리스트</label>
+                    <select id="preset-select" class="w-full bg-billiard-deep text-billiard-ivory py-2.5 px-3 rounded-lg border border-billiard-gold/40 focus:outline-none focus:border-billiard-gold transition-colors text-sm">
+                    </select>
+                </div>
+
+                <!-- Guideline Toggle Panel -->
+                <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-4 rounded-xl flex flex-col justify-between">
+                    <label class="block text-xs font-bold text-billiard-gold uppercase tracking-widest mb-2"><i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> 정밀 타격 시뮬레이션 보조</label>
+                    <div class="flex items-center justify-between h-full py-1">
+                        <span class="text-xs text-gray-300">정석 가이드라인 궤적 활성화</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="guideline-toggle" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-billiard-deep peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-billiard-gold"></div>
+                        </label>
                     </div>
+                </div>
+            </div>
+
+            <!-- MAIN SIMULATOR GRID -->
+            <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Canvas Area -->
+                <div class="lg:col-span-8 space-y-4">
+                    <!-- Premium Scoreboard HUD (Canvas Top Free Layout) -->
+                    <div class="bg-billiard-cloth/40 border border-billiard-gold/30 p-4 rounded-2xl shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div class="flex items-center space-x-6">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-10 h-10 bg-billiard-gold text-billiard-deep rounded-full flex items-center justify-center font-bold font-serif text-lg shadow-[0_0_12px_rgba(212,175,55,0.4)]">
+                                    <i class="fa-solid fa-trophy"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium">Score</span>
+                                    <span id="html-score-val" class="text-xl font-bold font-mono text-billiard-ivory">0 점</span>
+                                </div>
+                            </div>
+                            <div class="h-8 w-[1px] bg-billiard-bright/60 hidden sm:block"></div>
+                            <div>
+                                <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium mb-1">남은 기회 (Opportunities)</span>
+                                <div id="html-lives-container" class="flex items-center space-x-1.5">
+                                    <!-- Dynamic Glossy Billiard Ball Lives will be injected here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full sm:flex-1 max-w-md bg-billiard-deep/50 border border-billiard-bright/40 px-4 py-2.5 rounded-xl text-center sm:text-left flex items-center justify-between gap-2">
+                            <div class="flex-1">
+                                <span class="block text-[9px] text-billiard-gold uppercase tracking-wider font-semibold mb-0.5"><i class="fa-solid fa-circle-info mr-1"></i> 실시간 상태 (Status)</span>
+                                <p id="html-status-text" class="text-xs text-gray-300 font-medium">배치 준비 완료! 수구를 드래그해 샷을 성공시키세요.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative border-[16px] md:border-[20px] border-amber-950 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden">
+                        <div class="absolute inset-0 border-[8px] border-billiard-deep/30 pointer-events-none z-10"></div>
+                        <div class="billiard-cloth relative">
+                            <canvas id="billiardCanvas" class="block mx-auto max-w-full cursor-crosshair"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 샷 세기 실시간 게이지 (Shot Power Gauge) -->
+                    <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-5 rounded-2xl shadow-lg">
+                        <div class="flex justify-between items-center mb-2 text-xs">
+                            <span class="font-bold text-billiard-gold tracking-wider uppercase flex items-center">
+                                <i class="fa-solid fa-gauge-high mr-2 text-sm text-billiard-gold animate-pulse"></i>
+                                샷 세기 게이지 (Shot Power Gauge)
+                            </span>
+                            <span id="power-value-text" class="font-mono text-billiard-gold font-bold bg-billiard-deep/60 px-2.5 py-1 rounded border border-billiard-bright/40">파워: 0%</span>
+                        </div>
+                        <div class="relative w-full h-6 rounded-full bg-billiard-deep overflow-hidden border border-billiard-bright/40 shadow-inner">
+                            <!-- Gradient Fill Area -->
+                            <div id="power-bar-fill" class="h-full w-0 rounded-full" style="background: linear-gradient(to right, #10b981 0%, #fbbf24 50%, #ef4444 100%); transition: width 0.05s ease-out;"></div>
+                            <!-- Dynamic indicator line -->
+                            <div id="power-pointer" class="absolute top-0 bottom-0 w-1.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" style="left: 0%; transform: translateX(-50%); display: none; transition: left 0.05s ease-out;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-gray-400 mt-1.5 px-1 font-medium tracking-wider">
+                            <span>낮음 (Low)</span>
+                            <span>중간 (Medium)</span>
+                            <span>높음 (High)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Controller Panels -->
+                <div class="lg:col-span-4 flex flex-col gap-4">
+                    <!-- Solution Explanation Card -->
+                    <div class="bg-billiard-cloth/35 border border-billiard-gold/30 p-5 rounded-2xl flex-1 flex flex-col justify-between shadow-xl">
+                        <div>
+                            <div class="flex items-center space-x-2 text-billiard-gold mb-3">
+                                <i class="fa-solid fa-graduation-cap text-lg"></i>
+                                <span class="font-bold text-sm tracking-widest font-serif">SOLUTION GUIDE</span>
+                            </div>
+                            <h3 id="solution-title" class="text-lg font-bold text-billiard-ivory mb-2 font-serif">옆돌리기 배치 해결 정석</h3>
+                            <p id="solution-desc" class="text-xs text-gray-300 leading-relaxed min-h-[90px]">
+                                수구로 1적구의 오른쪽을 약 1/3 두께로 빗겨 맞춘 뒤, 우측 상단 회전을 실어 자연스럽게 쿠션을 태워 보내는 정석 배치입니다.
+                            </p>
+                        </div>
+
+                        <div class="border-t border-billiard-bright/40 pt-4 mt-4 space-y-2 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">목표 두께 (Thickness)</span>
+                                <span id="solution-thickness" class="font-semibold text-billiard-gold">1/3 두께 (30%)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">권장 속도 (Speed)</span>
+                                <span id="solution-speed" class="font-semibold text-billiard-gold">부드럽게 밀어치기</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">정석 당점 (Spin Spot)</span>
+                                <span id="solution-spin-tip" class="font-semibold text-billiard-gold">우상단 (2시 방향)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spin Selector -->
+                    <div class="bg-billiard-cloth/20 border border-billiard-bright/40 p-5 rounded-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span class="block text-xs font-bold text-billiard-gold font-serif tracking-wider uppercase">Spin & Cue Position</span>
+                                <span class="block text-[10px] text-gray-400">당구공 단면을 드래그해 당점 조절</span>
+                            </div>
+                            <div class="text-[10px] text-right font-mono text-billiard-gold">
+                                <div id="spin-y-val">상하: 무회전 (0.0)</div>
+                                <div id="spin-x-val">좌우: 무회전 (0.0)</div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center mb-2">
+                            <div id="spin-selector" class="relative w-24 h-24 rounded-full bg-billiard-ivory border-[3px] border-billiard-gold cursor-crosshair flex items-center justify-center shadow-inner">
+                                <div class="absolute w-full h-[1px] bg-gray-300 pointer-events-none"></div>
+                                <div class="absolute h-full w-[1px] bg-gray-300 pointer-events-none"></div>
+                                <!-- Red Dot Selector Point -->
+                                <div id="spin-dot" class="absolute w-4 h-4 rounded-full bg-red-600 border border-white shadow-md pointer-events-none transition-all duration-75" style="left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controller Footer Panel -->
+            <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 bg-billiard-cloth/10 border border-billiard-bright/30 p-4 rounded-xl">
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <button id="reset-table-btn" class="w-full sm:w-auto px-5 py-2.5 bg-billiard-bright hover:bg-billiard-gold hover:text-billiard-deep rounded-lg text-sm font-semibold transition-all duration-300 flex items-center justify-center">
+                        <i class="fa-solid fa-rotate-left mr-2"></i>샷 복구 및 재배치 (Reset)
+                    </button>
+                    <button id="sound-toggle-btn" class="w-full sm:w-auto px-4 py-2.5 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg text-sm border border-billiard-gold/30 transition-all flex items-center justify-center">
+                        <i class="fa-solid fa-volume-high mr-2"></i>Sound ON
+                    </button>
+                </div>
+                <div class="text-xs text-gray-400 text-center sm:text-right space-y-1">
                     <div>
-                        <button onclick="resetRankingsToDefault()" class="text-xs text-gray-400 hover:text-red-400 transition-colors">
-                            <i class="fa-solid fa-rotate mr-1"></i>랭킹 데이터 초기화
-                        </button>
+                        <span class="inline-block mr-3"><span class="inline-block w-2.5 h-2.5 rounded-full bg-white mr-1 align-middle border border-gray-400"></span> 내 수구</span>
+                        <span class="inline-block mr-3"><span class="inline-block w-2.5 h-2.5 rounded-full bg-yellow-400 mr-1 align-middle"></span> 상대 수구 (파울)</span>
+                        <span class="inline-block"><span class="inline-block w-2.5 h-2.5 rounded-full bg-red-600 mr-1 align-middle"></span> 적구 (2개 타격 목표)</span>
                     </div>
-                </div>
-
-                <!-- TABLE WRAPPER -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-billiard-bright/40 text-xs font-bold text-billiard-gold uppercase tracking-wider">
-                                <th class="pb-3 text-center w-16">순위</th>
-                                <th class="pb-3">닉네임</th>
-                                <th class="pb-3">나의 수지</th>
-                                <th class="pb-3 text-center">도전 성공 점수</th>
-                                <th class="pb-3 text-right">등록 일자</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ranking-list-body" class="divide-y divide-billiard-bright/20 text-sm">
-                            <!-- JS에 의해 실시간 바인딩됩니다. -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- EMPTY DATA FALLBACK -->
-                <div id="empty-state" class="hidden text-center py-12">
-                    <i class="fa-solid fa-ranking-star text-4xl text-billiard-gold/30 mb-3 block"></i>
-                    <p class="text-sm text-gray-400">아직 등록된 랭킹 정보가 없습니다. 첫 랭커가 되어 보세요!</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Custom Reset Warning Confirmation Modal (Replacing standard confirm) -->
-    <div id="reset-confirm-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-billiard-cloth border border-red-800/80 p-6 rounded-2xl max-w-sm w-full space-y-4 text-center shadow-2xl">
-            <div class="w-12 h-12 rounded-full bg-red-950 text-red-500 flex items-center justify-center text-xl mx-auto border border-red-800/40">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+    <!-- 3-Lives Game Over Modal with Carousel -->
+    <div id="game-over-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-billiard-cloth border-2 border-billiard-gold/60 p-6 md:p-8 rounded-3xl max-w-2xl w-full text-center space-y-6 shadow-2xl overflow-hidden relative">
+            <h3 class="text-2xl md:text-3xl font-bold font-serif text-billiard-gold"><i class="fa-solid fa-circle-exclamation mr-2 animate-bounce"></i>모든 기회 소진 (도전 종료!)</h3>
+            <p class="text-sm text-gray-300">3번의 실패 기회를 모두 소진했습니다. 최종 달성 성적을 검토하고 명예의 전당에 등극해보세요.</p>
+            
+            <div class="inline-block bg-billiard-deep/80 border border-billiard-bright px-8 py-4 rounded-2xl">
+                <span class="block text-[10px] text-gray-400 uppercase tracking-widest">Final Score</span>
+                <span id="modal-final-score" class="text-4xl font-extrabold font-mono text-billiard-gold">0 점</span>
             </div>
-            <div>
-                <h4 class="font-bold text-base text-billiard-ivory font-serif">랭킹 테이블 공장 초기화</h4>
-                <p class="text-xs text-gray-400 mt-1">모든 유저 기록이 소멸하고 초기 개발자 데이터로 복원됩니다. 정말 진행하시겠습니까?</p>
+
+            <!-- 랭킹 등록 폼 -->
+            <div class="bg-billiard-deep/60 border border-billiard-bright/60 p-4 rounded-2xl max-w-md mx-auto space-y-3">
+                <label class="block text-xs font-bold text-billiard-gold uppercase tracking-widest text-left"><i class="fa-solid fa-user-pen mr-1.5"></i> 명예의 전당 랭킹 등록</label>
+                <div class="flex gap-2">
+                    <input type="text" id="rank-name-input" maxlength="10" placeholder="닉네임을 입력하세요 (최대 10자)" class="flex-1 bg-billiard-deep text-billiard-ivory px-3 py-2 rounded-lg border border-billiard-bright/80 focus:outline-none focus:border-billiard-gold text-sm" />
+                    <button id="submit-ranking-btn" class="px-5 py-2 bg-billiard-gold text-billiard-deep font-bold rounded-lg hover:bg-billiard-ivory text-xs transition-all duration-300 shadow-[0_0_10px_rgba(212,175,55,0.3)]">등록</button>
+                </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="closeResetModal()" class="flex-1 py-2.5 bg-billiard-deep border border-billiard-bright/40 rounded-xl text-xs hover:bg-billiard-bright text-gray-300 transition-colors">취소</button>
-                <button onclick="executeResetRankings()" class="flex-1 py-2.5 bg-red-900 hover:bg-red-800 text-white font-bold rounded-xl text-xs transition-colors">초기화 진행</button>
+            
+            <div class="space-y-3 text-left">
+                <h4 class="text-xs font-bold text-billiard-gold uppercase tracking-wider flex items-center">
+                    <i class="fa-solid fa-circle-exclamation mr-1.5 text-red-500 animate-pulse"></i>
+                    놓친 배치 오답 노트 (가로로 넘겨보세요)
+                </h4>
+                
+                <!-- Horizontal Cards Container -->
+                <div id="missed-carousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 scrollbar-hide snap-x">
+                    <!-- Dynamic cards will go here -->
+                </div>
             </div>
+            
+            <button id="restart-game-btn" class="px-8 py-3 bg-billiard-gold text-billiard-deep font-bold rounded-xl hover:bg-white transition-colors duration-300 w-full md:w-auto">
+                새로운 훈련 시작하기
+            </button>
         </div>
     </div>
+
+    <!-- CALL TO ACTION (CTA) SECTION -->
+    <section id="cta" class="py-24 bg-billiard-deep relative overflow-hidden border-t border-billiard-bright/20">
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <h2 class="text-3xl md:text-5xl font-serif font-bold mb-6">탄탄한 백엔드가 필요하신가요?</h2>
+            <p class="text-gray-300 text-base md:text-lg mb-10 max-w-2xl mx-auto">
+                언제든지 같이 멋진 프로젝트 프레임을 설계할 동료들을 기다립니다. 광주에서의 만남, 혹은 온라인 커피챗 모두 열려 있습니다. 저와 함께 완벽한 한 큐를 성공시켜 보실래요?
+            </p>
+
+            <div class="inline-flex flex-col sm:flex-row items-center bg-billiard-cloth/30 border border-billiard-gold/30 p-2.5 rounded-xl max-w-lg w-full mx-auto gap-3 sm:gap-0 justify-between">
+                <div class="flex items-center space-x-3 pl-3">
+                    <i class="fa-solid fa-envelope text-billiard-gold text-lg"></i>
+                    <span id="developer-email" class="font-medium text-billiard-ivory tracking-wide">wjddudgns0918@gmail.com</span>
+                </div>
+                <button onclick="copyEmailToClipboard()" class="w-full sm:w-auto px-6 py-3 bg-billiard-gold text-billiard-deep font-bold rounded-lg hover:bg-billiard-ivory transition-all duration-300 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>이메일 복사하기</span>
+                </button>
+            </div>
+        </div>
+    </section>
 
     <!-- FOOTER -->
     <footer class="py-12 bg-billiard-deep border-t border-billiard-bright/10 text-gray-500 text-xs">
@@ -147,144 +333,1096 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LEADERBOARD LOGIC -->
+    <!-- JAVASCRIPT GAME LOGIC -->
     <script>
-        // 더미 데이터 (로컬 스토리지에 아무 기록이 없을 때 자동으로 노출될 개발자 친화형 데이터)
-        const DEFAULT_RANKERS = [];
+        let audioCtx = null;
+        let soundEnabled = true;
 
-        let loadedRankings = [];
-        let currentFilter = 'all';
-
-        // 1. 데이터 로드 및 초기화
-        function initRankingData() {
-            const localData = localStorage.getItem('billiard_rankings');
-            if (!localData) {
-                // 로컬 스토리지가 비었으면 세련된 기본 데이터로 초기화
-                localStorage.setItem('billiard_rankings', JSON.stringify(DEFAULT_RANKERS));
-                loadedRankings = [...DEFAULT_RANKERS];
-            } else {
-                loadedRankings = JSON.parse(localData);
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
-            renderRankings();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
         }
 
-        // 2. 리스트 바인딩 및 렌더링
-        function renderRankings() {
-            const listBody = document.getElementById('ranking-list-body');
-            const emptyState = document.getElementById('empty-state');
-            listBody.innerHTML = '';
+        function playCollisionSound(intensity) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
 
-            // 현재 로그인된 유저가 존재한다면 비교용 객체 획득
-            const userStr = localStorage.getItem('billiard_user');
-            const loggedInUser = userStr ? JSON.parse(userStr) : null;
-
-            // 필터 적용
-            const filtered = loadedRankings.filter(item => {
-                if (currentFilter === 'all') return true;
-                return item.handicap === currentFilter;
-            });
-
-            if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            filtered.forEach((item, index) => {
-                const tr = document.createElement('tr');
+                const volumeValue = Math.min(Math.max(intensity / 10, 0.05), 0.6);
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
                 
-                // 로그인된 나의 순위 행일 때 고유한 골드 글로우 스타일 강조 적용
-                const isMyRecord = loggedInUser && (item.name === loggedInUser.name);
-                if (isMyRecord) {
-                    tr.className = "bg-billiard-gold/10 border-y border-billiard-gold/30 hover:bg-billiard-gold/15 transition-colors font-semibold";
-                } else {
-                    tr.className = "hover:bg-billiard-cloth/20 transition-colors";
-                }
+                osc.type = 'sine';
+                const baseFreq = 800 + (intensity * 20);
+                osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
 
-                // 메달 순위 스타일링
-                let rankDisplay = `<span class="font-mono">${index + 1}</span>`;
-                if (currentFilter === 'all') {
-                    if (index === 0) rankDisplay = `<i class="fa-solid fa-medal text-yellow-400 text-lg"></i>`;
-                    else if (index === 1) rankDisplay = `<i class="fa-solid fa-medal text-gray-300 text-lg"></i>`;
-                    else if (index === 2) rankDisplay = `<i class="fa-solid fa-medal text-amber-600 text-lg"></i>`;
-                }
+                gain.gain.setValueAtTime(volumeValue, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
 
-                // 당구수지별 태그 스타일링
-                let handicapTag = '';
-                if (item.handicap === '상급자') {
-                    handicapTag = `<span class="px-2.5 py-0.5 rounded-full text-[10px] bg-red-950/80 text-red-400 border border-red-800/40 font-normal">상급자 (300)</span>`;
-                } else if (item.handicap === '중급자') {
-                    handicapTag = `<span class="px-2.5 py-0.5 rounded-full text-[10px] bg-yellow-950/80 text-billiard-gold border border-billiard-gold/40 font-normal">중급자 (150-250)</span>`;
-                } else {
-                    handicapTag = `<span class="px-2.5 py-0.5 rounded-full text-[10px] bg-emerald-950/80 text-emerald-400 border border-emerald-800/40 font-normal">초급자 (80-120)</span>`;
-                }
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-                // 닉네임 필드 설계 - 로그인 본인의 경우 (나) 배지 마킹
-                const myBadge = isMyRecord ? `<span class="ml-2 px-1.5 py-0.5 bg-billiard-gold text-billiard-deep text-[9px] font-extrabold rounded-md shadow-sm align-middle"><i class="fa-solid fa-user-check mr-0.5"></i>나</span>` : '';
-
-                tr.innerHTML = `
-                    <td class="py-4 text-center font-bold">${rankDisplay}</td>
-                    <td class="py-4 text-billiard-ivory">${escapeHTML(item.name)}${myBadge}</td>
-                    <td class="py-4">${handicapTag}</td>
-                    <td class="py-4 text-center font-bold font-mono text-billiard-gold text-base">${item.score} / 10</td>
-                    <td class="py-4 text-right text-xs text-gray-400">${item.date}</td>
-                `;
-                listBody.appendChild(tr);
-            });
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.07);
+            } catch (e) {
+                console.warn(e);
+            }
         }
 
-        // HTML Escape 방지용 헬퍼 함수
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
+        // Spin Control
+        const spinSelector = document.getElementById('spin-selector');
+        const spinDot = document.getElementById('spin-dot');
+        const spinXVal = document.getElementById('spin-x-val');
+        const spinYVal = document.getElementById('spin-y-val');
 
-        // 3. 필터 제어 함수
-        function filterRankings(filterType) {
-            currentFilter = filterType;
+        let currentSpinX = 0;
+        let currentSpinY = 0;
+        let isDraggingSpin = false;
+
+        function updateSpinFromCoords(clientX, clientY) {
+            const rect = spinSelector.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
             
-            // 모든 버튼 기본 클래스 리셋
-            const btns = [
-                { id: 'filter-all-btn', type: 'all' },
-                { id: 'filter-beg-btn', type: '초급자' },
-                { id: 'filter-int-btn', type: '중급자' },
-                { id: 'filter-adv-btn', type: '상급자' }
-            ];
+            let dx = clientX - centerX;
+            let dy = clientY - centerY;
+            
+            const maxRadius = rect.width / 2 - 4;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance > maxRadius) {
+                dx = (dx / distance) * maxRadius;
+                dy = (dy / distance) * maxRadius;
+            }
+            
+            currentSpinX = dx / maxRadius;
+            currentSpinY = -dy / maxRadius;
+            
+            updateSpinUIOnly();
+        }
 
-            btns.forEach(btn => {
-                const el = document.getElementById(btn.id);
-                if (btn.type === filterType) {
-                    el.className = "px-4 py-2 bg-billiard-gold text-billiard-deep font-bold rounded-lg text-xs transition-all shadow-[0_0_10px_rgba(212,175,55,0.2)]";
+        function updateSpinUIOnly() {
+            const rect = spinSelector.getBoundingClientRect();
+            const maxRadius = rect.width / 2 - 4;
+            const dx = currentSpinX * maxRadius;
+            const dy = -currentSpinY * maxRadius;
+
+            const pctX = 50 + (dx / (rect.width / 2)) * 50;
+            const pctY = 50 + (dy / (rect.height / 2)) * 50;
+            spinDot.style.left = `${pctX}%`;
+            spinDot.style.top = `${pctY}%`;
+            
+            const spinYText = currentSpinY > 0.1 ? `밀어치기 (+${currentSpinY.toFixed(1)})` : currentSpinY < -0.1 ? `끌어치기 (${currentSpinY.toFixed(1)})` : `무회전 (0.0)`;
+            const spinXText = currentSpinX > 0.1 ? `우회전 (+${currentSpinX.toFixed(1)})` : currentSpinX < -0.1 ? `좌회전 (${currentSpinX.toFixed(1)})` : `무회전 (0.0)`;
+            spinYVal.textContent = `상하: ${spinYText}`;
+            spinXVal.textContent = `좌우: ${spinXText}`;
+        }
+
+        spinSelector.addEventListener('mousedown', (e) => {
+            initAudio();
+            isDraggingSpin = true;
+            updateSpinFromCoords(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDraggingSpin) {
+                updateSpinFromCoords(e.clientX, e.clientY);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingSpin = false;
+        });
+
+        spinSelector.addEventListener('touchstart', (e) => {
+            initAudio();
+            isDraggingSpin = true;
+            updateSpinFromCoords(e.touches[0].clientX, e.touches[0].clientY);
+            e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDraggingSpin) {
+                updateSpinFromCoords(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            isDraggingSpin = false;
+        });
+
+
+        // Canvas Physics Engine
+        const canvas = document.getElementById('billiardCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const FRICTION = 0.988;
+        const BALL_RADIUS = 15;
+        
+        let balls = [];
+        let savedBallStates = null; // Cache to restore prior states (lives, score, ball positions)
+        let cueStick = {
+            active: false,
+            startX: 0,
+            startY: 0,
+            currentX: 0,
+            currentY: 0
+        };
+
+        // 3-Lives Game Logic Variables
+        let score = 0;
+        const MAX_LIVES = 3;
+        let lives = MAX_LIVES;
+        let missedLayouts = [];
+        let gameEnded = false;
+        let nextTrialTimeoutId = null;
+
+        let shotActive = false;
+        let hasHitRed1 = false;
+        let hasHitRed2 = false;
+        let hasHitOpponent = false;
+        let shotStatusText = "내 공(흰 공)을 드래그하여 목표 배치를 해결해보세요.";
+        
+        let hasShotOnCurrentLayout = false; // Tracks if a shot has been played on the current layout
+
+        function updateLivesUI() {
+            const container = document.getElementById('html-lives-container');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let i = 0; i < MAX_LIVES; i++) {
+                const ball = document.createElement('div');
+                if (i < lives) {
+                    // Active glossy red billiard ball
+                    ball.className = "w-5 h-5 rounded-full bg-red-600 shadow-[inset_-3px_-3px_6px_rgba(0,0,0,0.6),_0_2px_4px_rgba(0,0,0,0.3)] border border-red-700 relative transition-all duration-300 transform scale-100";
+                    // Add a tiny white glossy highlight spot
+                    const highlight = document.createElement('div');
+                    highlight.className = "absolute top-1 left-1 w-1 h-1 bg-white rounded-full opacity-70";
+                    ball.appendChild(highlight);
                 } else {
-                    el.className = "px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all";
+                    // Empty/faded gray placeholder ball
+                    ball.className = "w-5 h-5 rounded-full bg-gray-800 border border-gray-700 opacity-30 transition-all duration-300 transform scale-90";
                 }
+                container.appendChild(ball);
+            }
+        }
+
+        function updateScoreboardDOM() {
+            const scoreEl = document.getElementById('html-score-val');
+            const statusEl = document.getElementById('html-status-text');
+            if (scoreEl) scoreEl.textContent = `${score} 점`;
+            if (statusEl) statusEl.textContent = shotStatusText;
+        }
+
+        function getThicknessString(fraction) {
+            if (fraction >= 0.92) return "정면 (100% 두께)";
+            if (fraction >= 0.80) return "5/6 두께 (83%)";
+            if (fraction >= 0.70) return "3/4 두께 (75%)";
+            if (fraction >= 0.60) return "2/3 두께 (66%)";
+            if (fraction >= 0.45) return "1/2 두께 (50%)";
+            if (fraction >= 0.30) return "1/3 두께 (33%)";
+            if (fraction >= 0.20) return "1/4 두께 (25%)";
+            if (fraction >= 0.08) return "1/8 두께 (12%)";
+            return "스치듯 얇은 두께";
+        }
+
+        const LAYOUT_DATABASE = {
+            beginner: [
+                {
+                    id: "beg_push",
+                    name: "직구 밀어치기 (Basic Push)",
+                    desc: "1적구와 2적구가 거의 일직선상에 얌전히 늘어선 배치입니다. 회전을 주지 않고 부드러운 상단 밀어치기 당점만 준 상태로, 정면 두께로 부드럽게 밀어 타격하면 두 공이 나란히 부딪혀 쉽게 득점할 수 있습니다.",
+                    thickness: "정면 두께 (90% 이상)",
+                    speed: "부드럽게 밀어 타격 (속도 2.5)",
+                    spinTip: "상단 정중앙 (오시 당점)",
+                    defaultSpin: { x: 0.0, y: 0.6 },
+                    positions: {
+                        white: { x: 0.25, y: 0.5 },
+                        opponent: { x: 0.15, y: 0.25 },
+                        red1: { x: 0.55, y: 0.5 },
+                        red2: { x: 0.72, y: 0.5 }
+                    },
+                    guidePoints: [
+                        { x: 0.25, y: 0.5, type: 'start' },
+                        { x: 0.55, y: 0.5, type: 'hit1' },
+                        { x: 0.72, y: 0.5, type: 'hit2' }
+                    ]
+                },
+                {
+                    id: "beg_outer",
+                    name: "정면 옆돌리기 (Easy Outer Angle)",
+                    desc: "기초 회전을 가볍게 주고 옆을 깎아 맞춰 돌려치기 형태를 띠게 만듭니다. 좌측 상단 회전을 가한 채, 1적구 우측 1/2을 부드럽게 사선으로 맞추어 쿠션을 타고 흘러가게 해 줍니다.",
+                    thickness: "우측 절반 두께 (50%)",
+                    speed: "중간 힘으로 가볍게 밀기 (속도 3.0)",
+                    spinTip: "좌상단 (11시 방향)",
+                    defaultSpin: { x: -0.4, y: 0.4 },
+                    positions: {
+                        white: { x: 0.3, y: 0.65 },
+                        opponent: { x: 0.2, y: 0.3 },
+                        red1: { x: 0.55, y: 0.45 },
+                        red2: { x: 0.7, y: 0.25 }
+                    },
+                    guidePoints: [
+                        { x: 0.3, y: 0.65, type: 'start' },
+                        { x: 0.53, y: 0.45, type: 'hit1' },
+                        { x: 0.53, y: 0.12, type: 'cushion1' },
+                        { x: 0.7, y: 0.25, type: 'hit2' }
+                    ]
+                }
+            ],
+            intermediate: [
+                {
+                    id: "int_draw",
+                    name: "끌어치기 정석 (Draw Shot Practice)",
+                    desc: "적구들이 뒤로 모여 있는 형태입니다. 상단이나 일반 타격으로는 가로막히므로 완벽한 하단 당점(끌어치기)을 주어야 합니다. 1적구 2/3 두께를 타격하면 공이 강하게 백스핀을 먹어 수구 쪽으로 끌려 내려옵니다.",
+                    thickness: "2/3 두께 (66%)",
+                    speed: "날카롭고 절제된 끊어치기 (속도 4.0)",
+                    spinTip: "하단 정중앙 (끌어치기 당점)",
+                    defaultSpin: { x: 0.0, y: -0.85 },
+                    positions: {
+                        white: { x: 0.45, y: 0.65 },
+                        opponent: { x: 0.22, y: 0.3 },
+                        red1: { x: 0.52, y: 0.35 },
+                        red2: { x: 0.38, y: 0.35 }
+                    },
+                    guidePoints: [
+                        { x: 0.45, y: 0.65, type: 'start' },
+                        { x: 0.52, y: 0.35, type: 'hit1' },
+                        { x: 0.38, y: 0.35, type: 'hit2' }
+                    ]
+                },
+                {
+                    id: "int_back",
+                    name: "뒤돌려치기 (Inside Angle)",
+                    desc: "당구의 기본 꽃이라 불리는 뒤돌려치기 배치입니다. 1적구의 오른쪽을 정교하게 비껴친 후, 긴 우측 쿠션을 타고 꺾여 내려와 먼 코너에 고립된 2적구를 타격하도록 유도합니다.",
+                    thickness: "좌측 1/3 두께 (33%)",
+                    speed: "자연스럽게 탄성 굴리기 (속도 3.2)",
+                    spinTip: "우측 중단 회전 (3시 방향)",
+                    defaultSpin: { x: 0.6, y: 0.0 },
+                    positions: {
+                        white: { x: 0.35, y: 0.65 },
+                        opponent: { x: 0.2, y: 0.3 },
+                        red1: { x: 0.6, y: 0.55 },
+                        red2: { x: 0.25, y: 0.22 }
+                    },
+                    guidePoints: [
+                        { x: 0.35, y: 0.65, type: 'start' },
+                        { x: 0.61, y: 0.55, type: 'hit1' },
+                        { x: 0.77, y: 0.7, type: 'cushion1' },
+                        { x: 0.5, y: 0.9, type: 'cushion2' },
+                        { x: 0.25, y: 0.22, type: 'hit2' }
+                    ]
+                }
+            ],
+            advanced: [
+                {
+                    id: "adv_double",
+                    name: "더블 쿠션 장접시 (Double Cushion)",
+                    desc: "상하 쿠션을 지그재그로 연속 반사시키는 고난이도 시스템입니다. 우상단 맥시멈 회전을 걸어 1적구를 얇게 빗겨친 후 상단 쿠션->하단 쿠션을 연속으로 왕복하며 2적구에 도달시킵니다.",
+                    thickness: "우측 1/8 극도로 얇은 두께 (12%)",
+                    speed: "스피디하고 임팩트 있는 타격 (속도 4.5)",
+                    spinTip: "우상단 맥시멈 (2시 극단)",
+                    defaultSpin: { x: 0.75, y: 0.4 },
+                    positions: {
+                        white: { x: 0.22, y: 0.38 },
+                        opponent: { x: 0.15, y: 0.65 },
+                        red1: { x: 0.55, y: 0.68 },
+                        red2: { x: 0.78, y: 0.32 }
+                    },
+                    guidePoints: [
+                        { x: 0.22, y: 0.38, type: 'start' },
+                        { x: 0.55, y: 0.68, type: 'hit1' },
+                        { x: 0.88, y: 0.88, type: 'cushion1' },
+                        { x: 0.9, y: 0.12, type: 'cushion2' },
+                        { x: 0.78, y: 0.32, type: 'hit2' }
+                    ]
+                },
+                {
+                    id: "adv_bank",
+                    name: "가락 빈쿠션 치기 (3-Cushion Bank Shot)",
+                    desc: "수구로 적구를 바로 맞출 수 없는 절대 방어각입니다. 이럴 때는 빈 쿠션 3면을 먼저 연달아 때린 후 적구 더미로 자연스럽게 스며들어가 맞춰야 합니다. 일명 가락이라 불리는 최상급 지략입니다.",
+                    thickness: "쿠션 먼저 타격 (No Ball Contact First)",
+                    speed: "정확한 등속도 큐 진행 (속도 3.8)",
+                    spinTip: "좌측 하단 역회전 (7시 방향)",
+                    defaultSpin: { x: -0.5, y: -0.4 },
+                    positions: {
+                        white: { x: 0.3, y: 0.72 },
+                        opponent: { x: 0.25, y: 0.3 },
+                        red1: { x: 0.78, y: 0.4 },
+                        red2: { x: 0.8, y: 0.58 }
+                    },
+                    guidePoints: [
+                        { x: 0.3, y: 0.72, type: 'start' },
+                        { x: 0.58, y: 0.12, type: 'cushion1' },
+                        { x: 0.92, y: 0.3, type: 'cushion2' },
+                        { x: 0.5, y: 0.88, type: 'cushion3' },
+                        { x: 0.78, y: 0.4, type: 'hit2' }
+                    ]
+                }
+            ]
+        };
+
+        let currentHandicap = "intermediate";
+        let currentLayoutId = "int_draw";
+
+        class Ball {
+            constructor(x, y, color, isCue = false, type = 'red') {
+                this.x = x;
+                this.y = y;
+                this.vx = 0;
+                this.vy = 0;
+                this.radius = BALL_RADIUS;
+                this.color = color;
+                this.isCue = isCue;
+                this.type = type;
+                this.mass = 1;
+                this.spinX = 0;
+                this.spinY = 0;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x + 2, this.y + 4, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+
+                const grad = ctx.createRadialGradient(
+                    this.x - this.radius/3, this.y - this.radius/3, 1,
+                    this.x, this.y, this.radius
+                );
+                grad.addColorStop(0, 'rgba(255,255,255,0.6)');
+                grad.addColorStop(0.3, 'rgba(255,255,255,0.15)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                if (this.type === 'player-cue') {
+                    const activeSpinX = (this.vx === 0 && this.vy === 0) ? currentSpinX : this.spinX;
+                    const activeSpinY = (this.vx === 0 && this.vy === 0) ? currentSpinY : this.spinY;
+                    const dotX = this.x + (activeSpinX * (this.radius - 5));
+                    const dotY = this.y - (activeSpinY * (this.radius - 5));
+                    ctx.beginPath();
+                    ctx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fill();
+                } else if (this.type === 'opponent-cue') {
+                    ctx.beginPath();
+                    ctx.arc(this.x - 4, this.y - 1, 2, 0, Math.PI * 2);
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fill();
+                }
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vx *= FRICTION;
+                this.vy *= FRICTION;
+                this.spinX *= 0.985;
+                this.spinY *= 0.985;
+                if (Math.abs(this.spinX) < 0.01) this.spinX = 0;
+                if (Math.abs(this.spinY) < 0.01) this.spinY = 0;
+                if (Math.abs(this.vx) < 0.04) this.vx = 0;
+                if (Math.abs(this.vy) < 0.04) this.vy = 0;
+            }
+        }
+
+        function setupTable() {
+            const w = canvas.width;
+            const h = canvas.height;
+            balls = [];
+
+            const currentList = LAYOUT_DATABASE[currentHandicap] || LAYOUT_DATABASE.intermediate;
+            const layout = currentList.find(l => l.id === currentLayoutId) || currentList[0];
+
+            balls.push(new Ball(w * layout.positions.white.x, h * layout.positions.white.y, '#fbfaf5', true, 'player-cue'));
+            balls.push(new Ball(w * layout.positions.opponent.x, h * layout.positions.opponent.y, '#fcc419', false, 'opponent-cue'));
+            balls.push(new Ball(w * layout.positions.red1.x, h * layout.positions.red1.y, '#e03131', false, 'red1'));
+            balls.push(new Ball(w * layout.positions.red2.x, h * layout.positions.red2.y, '#e03131', false, 'red2'));
+
+            currentSpinX = layout.defaultSpin.x;
+            currentSpinY = layout.defaultSpin.y;
+            updateSpinUIOnly();
+
+            document.getElementById('solution-title').textContent = layout.name;
+            document.getElementById('solution-desc').textContent = layout.desc;
+            document.getElementById('solution-thickness').textContent = layout.thickness;
+            document.getElementById('solution-speed').textContent = layout.speed;
+            document.getElementById('solution-spin-tip').textContent = layout.spinTip;
+
+            shotActive = false;
+            hasHitRed1 = false;
+            hasHitRed2 = false;
+            hasHitOpponent = false;
+            
+            hasShotOnCurrentLayout = false; // Show guideline initially when layout is loaded
+            
+            shotStatusText = "신중하게 조준하여 득점 콤보를 만들어보세요!";
+            updateScoreboardDOM();
+            updateLivesUI();
+
+            // Cache initial states immediately
+            cacheBallStates();
+        }
+
+        function cacheBallStates() {
+            savedBallStates = {
+                lives: lives,
+                score: score,
+                hasShotOnCurrentLayout: hasShotOnCurrentLayout, // Cache first shot tracker state
+                balls: balls.map(b => ({
+                    x: b.x,
+                    y: b.y,
+                    vx: 0,
+                    vy: 0,
+                    color: b.color,
+                    isCue: b.isCue,
+                    type: b.type,
+                    spinX: b.spinX,
+                    spinY: b.spinY
+                }))
+            };
+        }
+
+        function restoreLastShotState() {
+            // Cancel automatic layout progression if reset is triggered during transition
+            if (nextTrialTimeoutId) {
+                clearTimeout(nextTrialTimeoutId);
+                nextTrialTimeoutId = null;
+            }
+
+            if (savedBallStates && savedBallStates.balls && savedBallStates.balls.length > 0) {
+                balls = savedBallStates.balls.map(s => {
+                    const b = new Ball(s.x, s.y, s.color, s.isCue, s.type);
+                    b.vx = 0;
+                    b.vy = 0;
+                    b.spinX = s.spinX;
+                    b.spinY = s.spinY;
+                    return b;
+                });
+                
+                lives = savedBallStates.lives;
+                score = savedBallStates.score;
+                hasShotOnCurrentLayout = savedBallStates.hasShotOnCurrentLayout; // Restore first shot state tracker
+
+                shotActive = false;
+                hasHitRed1 = false;
+                hasHitRed2 = false;
+                hasHitOpponent = false;
+                shotStatusText = "이전 샷 직전 상태로 완벽히 복원되었습니다! 다시 조준해 보세요.";
+                updateScoreboardDOM();
+                updateLivesUI();
+                showToast('샷 복구 완료!', '방금 전 샷 직전의 공 위치와 기회 상태로 복원되었습니다.');
+            } else {
+                setupTable();
+            }
+        }
+
+        function checkCollisions() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const spinCushionEffect = 2.2;
+
+            for (let i = 0; i < balls.length; i++) {
+                let b = balls[i];
+                if (b.x < b.radius) {
+                    b.x = b.radius;
+                    b.vx = -b.vx * 0.85;
+                    b.vy -= b.spinX * spinCushionEffect * Math.abs(b.vx);
+                    if (Math.abs(b.vx) > 0.5) playCollisionSound(Math.abs(b.vx));
+                }
+                if (b.x > w - b.radius) {
+                    b.x = w - b.radius;
+                    b.vx = -b.vx * 0.85;
+                    b.vy += b.spinX * spinCushionEffect * Math.abs(b.vx);
+                    if (Math.abs(b.vx) > 0.5) playCollisionSound(Math.abs(b.vx));
+                }
+                if (b.y < b.radius) {
+                    b.y = b.radius;
+                    b.vy = -b.vy * 0.85;
+                    b.vx += b.spinX * spinCushionEffect * Math.abs(b.vy);
+                    if (Math.abs(b.vy) > 0.5) playCollisionSound(Math.abs(b.vy));
+                }
+                if (b.y > h - b.radius) {
+                    b.y = h - b.radius;
+                    b.vy = -b.vy * 0.85;
+                    b.vx -= b.spinX * spinCushionEffect * Math.abs(b.vy);
+                    if (Math.abs(b.vy) > 0.5) playCollisionSound(Math.abs(b.vy));
+                }
+            }
+
+            for (let i = 0; i < balls.length; i++) {
+                for (let j = i + 1; j < balls.length; j++) {
+                    let b1 = balls[i];
+                    let b2 = balls[j];
+
+                    let dx = b2.x - b1.x;
+                    let dy = b2.y - b1.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < b1.radius + b2.radius) {
+                        let overlap = (b1.radius + b2.radius) - dist;
+                        let nx = dx / dist;
+                        let ny = dy / dist;
+
+                        b1.x -= nx * overlap * 0.5;
+                        b1.y -= ny * overlap * 0.5;
+                        b2.x += nx * overlap * 0.5;
+                        b2.y += ny * overlap * 0.5;
+
+                        let kx = b1.vx - b2.vx;
+                        let ky = b1.vy - b2.vy;
+                        let p = 2 * (nx * kx + ny * ky) / (b1.mass + b2.mass);
+
+                        b1.vx -= p * b2.mass * nx;
+                        b1.vy -= p * b2.mass * ny;
+                        b2.vx += p * b1.mass * nx;
+                        b2.vy += p * b1.mass * ny;
+
+                        const spinForceMultiplier = 4.0;
+                        if (b1.type === 'player-cue' && Math.abs(b1.spinY) > 0.05) {
+                            const spinForce = b1.spinY * spinForceMultiplier;
+                            b1.vx += nx * spinForce;
+                            b1.vy += ny * spinForce;
+                        } else if (b2.type === 'player-cue' && Math.abs(b2.spinY) > 0.05) {
+                            const spinForce = b2.spinY * spinForceMultiplier;
+                            b2.vx -= nx * spinForce;
+                            b2.vy -= ny * spinForce;
+                        }
+
+                        if (b1.type === 'player-cue' || b2.type === 'player-cue') {
+                            const opponent = (b1.type === 'player-cue') ? b2 : b1;
+                            if (opponent.type === 'red1') {
+                                hasHitRed1 = true;
+                            } else if (opponent.type === 'red2') {
+                                hasHitRed2 = true;
+                            } else if (opponent.type === 'opponent-cue') {
+                                hasHitOpponent = true;
+                            }
+                        }
+
+                        const relVel = Math.sqrt(kx*kx + ky*ky);
+                        if (relVel > 0.3) {
+                            playCollisionSound(relVel * 2);
+                        }
+                    }
+                }
+            }
+        }
+
+        function getCanvasMousePos(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+            const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function handleDragStart(evt) {
+            if (gameEnded) return;
+            initAudio();
+            const pos = getCanvasMousePos(evt);
+            const cue = balls[0];
+            const dx = pos.x - cue.x;
+            const dy = pos.y - cue.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+
+            if (dist < 45 && cue.vx === 0 && cue.vy === 0) {
+                // Pre-cache exactly before releasing energy
+                cacheBallStates();
+                
+                cueStick.active = true;
+                cueStick.startX = cue.x;
+                cueStick.startY = cue.y;
+                cueStick.currentX = pos.x;
+                cueStick.currentY = pos.y;
+                evt.preventDefault();
+            }
+        }
+
+        function handleDragMove(evt) {
+            if (!cueStick.active) return;
+            const pos = getCanvasMousePos(evt);
+            cueStick.currentX = pos.x;
+            cueStick.currentY = pos.y;
+        }
+
+        function handleDragEnd() {
+            if (!cueStick.active) return;
+            cueStick.active = false;
+
+            const cue = balls[0];
+            const dx = cueStick.startX - cueStick.currentX;
+            const dy = cueStick.startY - cueStick.currentY;
+
+            const force = 0.22;
+            cue.vx = dx * force;
+            cue.vy = dy * force;
+
+            const speed = Math.sqrt(cue.vx * cue.vx + cue.vy * cue.vy);
+            const MAX_SPEED = 18;
+            if (speed > MAX_SPEED) {
+                cue.vx = (cue.vx / speed) * MAX_SPEED;
+                cue.vy = (cue.vy / speed) * MAX_SPEED;
+            }
+
+            if (speed > 1) {
+                cue.spinX = currentSpinX;
+                cue.spinY = currentSpinY;
+                shotActive = true;
+                
+                hasShotOnCurrentLayout = true; // Turn off guidelines since the player has taken their first shot
+                
+                hasHitRed1 = false;
+                hasHitRed2 = false;
+                hasHitOpponent = false;
+                shotStatusText = "샷 발사! 수구 궤적 분석 중...";
+                updateScoreboardDOM();
+                playCollisionSound(speed);
+            }
+        }
+
+        canvas.addEventListener('mousedown', handleDragStart);
+        window.addEventListener('mousemove', handleDragMove);
+        window.addEventListener('mouseup', handleDragEnd);
+
+        canvas.addEventListener('touchstart', handleDragStart, { passive: false });
+        window.addEventListener('touchmove', handleDragMove);
+        window.addEventListener('touchend', handleDragEnd);
+
+        function evaluateShot() {
+            shotActive = false;
+            
+            const currentList = LAYOUT_DATABASE[currentHandicap] || LAYOUT_DATABASE.intermediate;
+            const layout = currentList.find(l => l.id === currentLayoutId) || currentList[0];
+
+            if (hasHitRed1 && hasHitRed2 && !hasHitOpponent) {
+                score++;
+                shotStatusText = `🎉 득점 성공! 기회가 유지됩니다. 계속해서 다음 샷을 이어가세요!`;
+                showToast('득점 성공! 🎉', '정밀 설계가 완벽하게 들어맞았습니다! 목숨이 보호됩니다. +1점');
+            } else {
+                lives--;
+                // Add to missed layouts array for the error handbook
+                if (!missedLayouts.some(item => item.id === layout.id)) {
+                    missedLayouts.push(layout);
+                }
+                
+                if (hasHitOpponent) {
+                    shotStatusText = `❌ 황색 공 터치 파울! 기회가 1회 차감되었습니다.`;
+                    showToast('파울! ❌', '상대 수구를 먼저 건드려 기회가 1회 차감되었습니다.');
+                } else {
+                    shotStatusText = `😢 실패! 기회가 1회 차감되었습니다.`;
+                    showToast('실패 😢', '아쉽게도 두 적구를 전부 맞추지 못해 기회가 1회 차감되었습니다.');
+                }
+            }
+
+            updateScoreboardDOM();
+            updateLivesUI();
+            
+            // Check if game has ended
+            if (lives <= 0) {
+                nextTrialTimeoutId = setTimeout(endTrainingGame, 2200);
+            } else {
+                nextTrialTimeoutId = setTimeout(prepareNextTrialKeepPositions, 2200);
+            }
+        }
+
+        function prepareNextTrialKeepPositions() {
+            // Stop all ball movements
+            balls.forEach(b => {
+                b.vx = 0;
+                b.vy = 0;
+                b.spinX = 0;
+                b.spinY = 0;
             });
 
-            renderRankings();
+            hasHitRed1 = false;
+            hasHitRed2 = false;
+            hasHitOpponent = false;
+            shotActive = false;
+
+            shotStatusText = "현재 공들이 멈춰선 자리 그대로, 다음 샷을 계속 진행하세요!";
+            updateScoreboardDOM();
+
+            // Cache current state as the baseline undo point for the new turn
+            cacheBallStates();
         }
 
-        // 4. 강제 초기화 트리거 제어 (confirm 대체 커스텀 모달)
-        function resetRankingsToDefault() {
-            const modal = document.getElementById('reset-confirm-modal');
-            if (modal) modal.classList.remove('hidden');
+        function endTrainingGame() {
+            gameEnded = true;
+            document.getElementById('modal-final-score').textContent = `${score} 점`;
+            
+            const carousel = document.getElementById('missed-carousel');
+            carousel.innerHTML = '';
+
+            if (missedLayouts.length === 0) {
+                carousel.innerHTML = `
+                    <div class="w-full text-center py-6 bg-billiard-deep/40 rounded-xl border border-billiard-gold/20">
+                        <p class="text-billiard-gold font-bold text-sm">🎉 와우! 완벽한 당구 실력!</p>
+                        <p class="text-xs text-gray-400 mt-1">단 하나의 무리수 배치도 없이 기회를 철저하게 지켜내셨습니다.</p>
+                    </div>
+                `;
+            } else {
+                missedLayouts.forEach(layout => {
+                    const card = document.createElement('div');
+                    card.className = "min-w-[260px] md:min-w-[300px] bg-billiard-deep/80 border border-billiard-bright/50 p-4 rounded-2xl snap-start flex flex-col justify-between shadow-lg space-y-3";
+                    card.innerHTML = `
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 bg-red-950 text-red-400 text-[10px] font-bold rounded-full mb-2 border border-red-800/40">오답 복습</span>
+                            <h5 class="font-serif font-bold text-sm text-billiard-ivory mb-1">${layout.name}</h5>
+                            <p class="text-[11px] text-gray-400 line-clamp-3 leading-relaxed">${layout.desc}</p>
+                        </div>
+                        <div class="border-t border-billiard-bright/30 pt-2.5 flex justify-between items-center text-[10px] text-billiard-gold">
+                            <span>두께: ${layout.thickness}</span>
+                            <span>당점: ${layout.spinTip}</span>
+                        </div>
+                    `;
+                    carousel.appendChild(card);
+                });
+            }
+
+            document.getElementById('game-over-modal').classList.remove('hidden');
         }
 
-        function closeResetModal() {
-            const modal = document.getElementById('reset-confirm-modal');
-            if (modal) modal.classList.add('hidden');
+        function restartGame() {
+            if (nextTrialTimeoutId) {
+                clearTimeout(nextTrialTimeoutId);
+                nextTrialTimeoutId = null;
+            }
+            score = 0;
+            lives = MAX_LIVES;
+            missedLayouts = [];
+            gameEnded = false;
+            document.getElementById('game-over-modal').classList.add('hidden');
+            setupTable();
+            updateLivesUI();
         }
 
-        function executeResetRankings() {
-            localStorage.setItem('billiard_rankings', JSON.stringify(DEFAULT_RANKERS));
-            loadedRankings = [...DEFAULT_RANKERS];
-            closeResetModal();
-            filterRankings('all');
-            showToast('초기화 완료', '명예의 전당 점수가 기본값으로 리프레시되었습니다.');
+        document.getElementById('submit-ranking-btn').addEventListener('click', () => {
+            const nameInput = document.getElementById('rank-name-input');
+            const nickname = nameInput.value.trim();
+            
+            if (!nickname) {
+                showToast('닉네임 입력 필요', '명예의 전당에 등록할 닉네임을 입력해 주세요!');
+                return;
+            }
+
+            // Load existing list
+            let currentRankings = JSON.parse(localStorage.getItem('billiard_rankings')) || [];
+            
+            let handicapKo = "중급자";
+            if (currentHandicap === "beginner") handicapKo = "초급자";
+            if (currentHandicap === "advanced") handicapKo = "상급자";
+
+            const newRecord = {
+                id: Date.now(),
+                name: nickname,
+                handicap: handicapKo,
+                score: score,
+                date: new Date().toLocaleDateString('ko-KR')
+            };
+
+            currentRankings.push(newRecord);
+            currentRankings.sort((a, b) => b.score - a.score || b.id - a.id);
+
+            localStorage.setItem('billiard_rankings', JSON.stringify(currentRankings));
+
+            showToast('랭킹 등록 완료!', '명예의 전당 랭킹 페이지로 이동합니다.');
+            nameInput.value = '';
+
+            setTimeout(() => {
+                window.location.href = 'ranking.html';
+            }, 1000);
+        });
+
+        function resizeCanvas() {
+            canvas.width = 800;
+            canvas.height = 400;
+            setupTable();
         }
 
-        // 토스트 알림 제어
+        function checkUserProfile() {
+            const userStr = localStorage.getItem('billiard_user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                
+                const handicapSelect = document.getElementById('handicap-select');
+                if (handicapSelect) {
+                    handicapSelect.value = user.handicap;
+                    currentHandicap = user.handicap;
+                }
+                
+                const rankNameInput = document.getElementById('rank-name-input');
+                if (rankNameInput) {
+                    rankNameInput.value = user.name;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.moveTo(canvas.width * 0.25, 0);
+            ctx.lineTo(canvas.width * 0.25, canvas.height);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            const guidelineActive = document.getElementById('guideline-toggle').checked;
+            if (guidelineActive && !hasShotOnCurrentLayout) { 
+                const currentList = LAYOUT_DATABASE[currentHandicap] || LAYOUT_DATABASE.intermediate;
+                const activeLayout = currentList.find(l => l.id === currentLayoutId) || currentList[0];
+
+                if (activeLayout && activeLayout.guidePoints && activeLayout.guidePoints.length > 1) {
+                    ctx.beginPath();
+                    ctx.setLineDash([6, 6]);
+                    ctx.lineWidth = 2.5;
+                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
+
+                    const startPt = activeLayout.guidePoints[0];
+                    ctx.moveTo(canvas.width * startPt.x, canvas.height * startPt.y);
+
+                    for (let p = 1; p < activeLayout.guidePoints.length; p++) {
+                        const pt = activeLayout.guidePoints[p];
+                        ctx.lineTo(canvas.width * pt.x, canvas.height * pt.y);
+                    }
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    
+                    activeLayout.guidePoints.forEach((pt, idx) => {
+                        if (idx > 0) {
+                            ctx.beginPath();
+                            ctx.arc(canvas.width * pt.x, canvas.height * pt.y, 6, 0, Math.PI * 2);
+                            ctx.fillStyle = pt.type.startsWith('hit') ? 'rgba(224, 49, 49, 0.5)' : 'rgba(19, 92, 59, 0.6)';
+                            ctx.fill();
+                        }
+                    });
+                }
+            }
+
+            checkCollisions();
+
+            balls.forEach(ball => {
+                ball.update();
+                ball.draw();
+            });
+
+            if (cueStick.active) {
+                const cue = balls[0];
+                const dx = cueStick.startX - cueStick.currentX;
+                const dy = cueStick.startY - cueStick.currentY;
+                const len = Math.sqrt(dx*dx + dy*dy);
+
+                const maxPull = 82;
+                const powerPct = Math.min(Math.round((len / maxPull) * 100), 100);
+                
+                document.getElementById('power-bar-fill').style.width = `${powerPct}%`;
+                const pointer = document.getElementById('power-pointer');
+                pointer.style.left = `${powerPct}%`;
+                pointer.style.display = 'block';
+                document.getElementById('power-value-text').textContent = `파워: ${powerPct}%`;
+
+                if (len > 5) {
+                    const ux = dx / len;
+                    const uy = dy / len;
+
+                    let minT = Infinity;
+                    let collisionTarget = null;
+                    let collisionType = '';
+
+                    for (let i = 1; i < balls.length; i++) {
+                        const target = balls[i];
+                        const vx = cue.x - target.x;
+                        const vy = cue.y - target.y;
+
+                        const b = vx * ux + vy * uy;
+                        const c = (vx * vx + vy * vy) - 4 * BALL_RADIUS * BALL_RADIUS;
+                        const disc = b * b - c;
+
+                        if (disc >= 0) {
+                            const t1 = -b - Math.sqrt(disc);
+                            if (t1 > 0 && t1 < minT) {
+                                minT = t1;
+                                collisionTarget = target;
+                                collisionType = 'ball';
+                            }
+                        }
+                    }
+
+                    if (ux < 0) {
+                        const t = (BALL_RADIUS - cue.x) / ux;
+                        if (t > 0 && t < minT) { minT = t; collisionTarget = 'left'; collisionType = 'wall'; }
+                    }
+                    if (ux > 0) {
+                        const t = (canvas.width - BALL_RADIUS - cue.x) / ux;
+                        if (t > 0 && t < minT) { minT = t; collisionTarget = 'right'; collisionType = 'wall'; }
+                    }
+                    if (uy < 0) {
+                        const t = (BALL_RADIUS - cue.y) / uy;
+                        if (t > 0 && t < minT) { minT = t; collisionTarget = 'top'; collisionType = 'wall'; }
+                    }
+                    if (uy > 0) {
+                        const t = (canvas.height - BALL_RADIUS - cue.y) / uy;
+                        if (t > 0 && t < minT) { minT = t; collisionTarget = 'bottom'; collisionType = 'wall'; }
+                    }
+
+                    const renderT = minT !== Infinity ? minT : 1000;
+                    ctx.beginPath();
+                    ctx.moveTo(cue.x, cue.y);
+                    ctx.lineTo(cue.x + ux * renderT, cue.y + uy * renderT);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+                    ctx.setLineDash([5, 5]);
+                    ctx.lineWidth = 1.8;
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    if (minT !== Infinity) {
+                        const gx = cue.x + ux * minT;
+                        const gy = cue.y + uy * minT;
+
+                        ctx.beginPath();
+                        ctx.arc(gx, gy, BALL_RADIUS, 0, Math.PI * 2);
+                        ctx.strokeStyle = 'rgba(251, 250, 245, 0.55)';
+                        ctx.lineWidth = 1.5;
+                        ctx.setLineDash([3, 3]);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+
+                        ctx.beginPath();
+                        ctx.arc(gx, gy, 2, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(251, 250, 245, 0.8)';
+                        ctx.fill();
+
+                        if (collisionType === 'ball' && collisionTarget) {
+                            const d = Math.abs((collisionTarget.x - cue.x) * (-uy) + (collisionTarget.y - cue.y) * ux);
+                            const fraction = 1 - (d / (2 * BALL_RADIUS));
+                            const thicknessStr = getThicknessString(fraction);
+
+                            ctx.font = '11px Inter, Noto Sans KR, sans-serif';
+                            ctx.fillStyle = '#d4af37';
+                            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                            ctx.shadowBlur = 4;
+                            ctx.textAlign = 'center';
+                            ctx.fillText(thicknessStr, gx, gy - BALL_RADIUS - 8);
+                            ctx.shadowBlur = 0;
+
+                            ctx.beginPath();
+                            ctx.moveTo(gx, gy);
+                            ctx.lineTo(collisionTarget.x, collisionTarget.y);
+                            ctx.strokeStyle = 'rgba(239, 68, 68, 0.55)';
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+
+                    ctx.beginPath();
+                    ctx.moveTo(cue.x - ux * 25, cue.y - uy * 25);
+                    ctx.lineTo(cue.x - ux * (25 + Math.min(len, 100) + 200), cue.y - uy * (25 + Math.min(len, 100) + 200));
+                    
+                    const stickGrad = ctx.createLinearGradient(
+                        cue.x - ux * 25, cue.y - uy * 25,
+                        cue.x - ux * 250, cue.y - uy * 250
+                    );
+                    stickGrad.addColorStop(0, '#f0d3a2');
+                    stickGrad.addColorStop(0.05, '#5c2c16');
+                    stickGrad.addColorStop(1, '#1d0b04');
+                    
+                    ctx.strokeStyle = stickGrad;
+                    ctx.lineWidth = 5;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+                }
+            } else {
+                document.getElementById('power-bar-fill').style.width = `0%`;
+                document.getElementById('power-pointer').style.display = 'none';
+                document.getElementById('power-value-text').textContent = `파워: 0%`;
+            }
+
+            if (shotActive) {
+                let allStopped = balls.every(ball => ball.vx === 0 && ball.vy === 0);
+                if (allStopped) {
+                    evaluateShot();
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        const handicapSelect = document.getElementById('handicap-select');
+        const presetSelect = document.getElementById('preset-select');
+
+        function updatePresetDropdown() {
+            currentHandicap = handicapSelect.value;
+            const layouts = LAYOUT_DATABASE[currentHandicap];
+            presetSelect.innerHTML = '';
+            
+            layouts.forEach(layout => {
+                const opt = document.createElement('option');
+                opt.value = layout.id;
+                opt.textContent = layout.name;
+                presetSelect.appendChild(opt);
+            });
+
+            currentLayoutId = layouts[0].id;
+            setupTable();
+        }
+
+        handicapSelect.addEventListener('change', updatePresetDropdown);
+        presetSelect.addEventListener('change', (e) => {
+            currentLayoutId = e.target.value;
+            setupTable();
+        });
+
+        window.onload = function() {
+            checkUserProfile(); 
+            updatePresetDropdown(); 
+            resizeCanvas();
+            animate();
+        };
+
+        // Reset Table Button uses Undo system
+        document.getElementById('reset-table-btn').addEventListener('click', () => {
+            restoreLastShotState();
+        });
+
+        // Restart trigger on Modal
+        document.getElementById('restart-game-btn').addEventListener('click', () => {
+            restartGame();
+        });
+
+        const soundBtn = document.getElementById('sound-toggle-btn');
+        soundBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            if (soundEnabled) {
+                soundBtn.innerHTML = `<i class="fa-solid fa-volume-high mr-2"></i>Sound ON`;
+                soundBtn.classList.remove('opacity-60');
+                showToast('사운드 켜짐', '당구 타격 및 마찰 효과음이 활성화되었습니다.');
+            } else {
+                soundBtn.innerHTML = `<i class="fa-solid fa-volume-xmark mr-2"></i>Sound OFF`;
+                soundBtn.classList.add('opacity-60');
+                showToast('사운드 꺼짐', '음소거 상태로 변경되었습니다.');
+            }
+        });
+
         function showToast(title, desc) {
             const toast = document.getElementById('custom-toast');
             document.getElementById('toast-title').textContent = title;
@@ -296,13 +1434,20 @@
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
                 toast.classList.remove('translate-y-0', 'opacity-100');
-            }, 3000);
+            }, 3500);
         }
 
-        // 로드 시 자동 이행
-        window.onload = function() {
-            initRankingData();
-        };
+        function copyEmailToClipboard() {
+            const emailSpan = document.getElementById('developer-email');
+            const tempInput = document.createElement('textarea');
+            tempInput.value = emailSpan.textContent;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast('이메일 복사 완료!', '클립보드에 주소가 복사되었습니다. 언제든 연락 주세요!');
+        }
+
     </script>
 </body>
 </html>
