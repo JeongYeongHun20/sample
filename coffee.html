@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>완벽한 한 큐 - 핸드드립 커피</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Global Navigation Module -->
+    <script src="navbar.js" defer></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        billiard: {
+                            deep: '#051811',
+                            cloth: '#0b3c26',
+                            bright: '#135c3b',
+                            gold: '#d4af37',
+                            wood: '#5c2c16',
+                            ivory: '#fbfaf5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa7c11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Steam Animation */
+        @keyframes steam {
+            0% { transform: translateY(0) scale(0.9) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.35; }
+            100% { transform: translateY(-30px) scale(1.1) rotate(15deg); opacity: 0; }
+        }
+        .steam-effect {
+            animation: steam 3s infinite linear;
+        }
+    </style>
+</head>
+<body class="bg-billiard-deep text-billiard-ivory font-sans overflow-x-hidden">
+
+    <!-- HERO HEADER SECTION -->
+    <section class="relative min-h-[75vh] flex items-center justify-center pt-24 overflow-hidden">
+        <!-- Visual coffee aura pattern -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[1px] bg-gradient-to-r from-transparent via-billiard-gold to-transparent rotate-[-25deg]"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[2px] bg-gradient-to-r from-transparent via-billiard-bright to-transparent rotate-[-25deg] translate-y-12"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-6 text-center relative z-10 py-12">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-billiard-cloth/50 border border-billiard-bright text-billiard-gold text-xs tracking-[0.2em] uppercase mb-6">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Specialty Coffee Passion</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-serif leading-tight font-bold tracking-tight mb-6">
+                0.1g의 섬세함을 담아<br>
+                <span class="text-gold-gradient font-serif italic">정밀하게 커피를 추출합니다</span>
+            </h1>
+
+            <p class="text-gray-300 max-w-2xl mx-auto text-sm md:text-base leading-relaxed mb-10">
+                수구의 각도를 끈질기게 계산해 큐를 밀어내듯,<br class="hidden sm:inline">
+                원두의 정밀한 분쇄 입도와 추출 유속을 제어하여 가장 완벽하고 향기로운 한 잔을 창조해 냅니다.
+            </p>
+
+            <!-- Quick Link CTA -->
+            <div class="flex justify-center">
+                <a href="#brew-assistant" class="px-7 py-3.5 bg-billiard-gold text-billiard-deep font-bold rounded-lg hover:bg-billiard-ivory hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 flex items-center space-x-2 text-xs uppercase tracking-wider">
+                    <span>4666 레시피 타이머 가기</span>
+                    <i class="fa-solid fa-circle-play text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MY BEANS & GEAR GEARBOX -->
+    <section class="py-20 bg-billiard-cloth/20 border-t border-billiard-bright/20">
+        <div class="max-w-6xl mx-auto px-6">
+            
+            <div class="text-center max-w-xl mx-auto mb-16 space-y-3">
+                <span class="text-billiard-gold font-serif italic text-base">The Selection</span>
+                <h2 class="text-2xl md:text-3xl font-bold font-serif">바리스타 정영훈의 홈바 세팅</h2>
+                <div class="w-12 h-[1px] bg-billiard-gold/50 mx-auto mt-2"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Beans Card -->
+                <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-8 rounded-2xl flex flex-col justify-between shadow-xl relative overflow-hidden group hover:border-billiard-gold/50 transition-all duration-300">
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 bg-billiard-deep border border-billiard-gold/30 rounded-xl flex items-center justify-center text-billiard-gold text-xl">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <span class="text-[10px] tracking-widest font-mono text-billiard-gold uppercase bg-billiard-deep/80 px-2 py-1 rounded">Favorite Bean</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-billiard-ivory mb-2">에티오피아 (Ethiopia)</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">
+                                베리류의 은은한 단맛과 화사한 자스민 꽃 향기, 시트러스한 오렌지빛 산미를 담아 기분을 정화하는 산지입니다. 라이트 로스팅된 싱글 오리진을 주력으로 다룹니다.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="border-t border-billiard-bright/40 pt-4 mt-8 flex justify-between items-center text-[10px] text-gray-500 font-mono">
+                        <span>FLAVOR</span>
+                        <span class="text-billiard-gold font-bold">Floral, Jasmine, Citrus, Berry</span>
+                    </div>
+                </div>
+
+                <!-- Gear 1: Hario V60 -->
+                <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-8 rounded-2xl flex flex-col justify-between shadow-xl relative overflow-hidden group hover:border-billiard-gold/50 transition-all duration-300">
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 bg-billiard-deep border border-billiard-gold/30 rounded-xl flex items-center justify-center text-billiard-gold text-xl">
+                                <i class="fa-solid fa-filter"></i>
+                            </div>
+                            <span class="text-[10px] tracking-widest font-mono text-billiard-gold uppercase bg-billiard-deep/80 px-2 py-1 rounded">My Dripper</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-billiard-ivory mb-2">하리오 V60 세트</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">
+                                60도 원뿔 모양 설계와 나선형 리브(Rib)가 공기 흐름을 부드럽게 연출하여 물 흐름 속도(유속)를 제어하는 드립계의 표준 장비입니다. 컵의 해상도를 맑고 높게 표현해 줍니다.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="border-t border-billiard-bright/40 pt-4 mt-8 flex justify-between items-center text-[10px] text-gray-500 font-mono">
+                        <span>MATERIAL</span>
+                        <span class="text-billiard-gold font-bold">Glass or Ceramic / Cone-shaped</span>
+                    </div>
+                </div>
+
+                <!-- Gear 2: Holtzklotz Epic 2 -->
+                <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-8 rounded-2xl flex flex-col justify-between shadow-xl relative overflow-hidden group hover:border-billiard-gold/50 transition-all duration-300">
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 bg-billiard-deep border border-billiard-gold/30 rounded-xl flex items-center justify-center text-billiard-gold text-xl">
+                                <i class="fa-solid fa-scroll"></i>
+                            </div>
+                            <span class="text-[10px] tracking-widest font-mono text-billiard-gold uppercase bg-billiard-deep/80 px-2 py-1 rounded">Precision Grinder</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-billiard-ivory mb-2">홀츠클로츠 에픽2 그라인더</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">
+                                황동과 메탈바디로 감싼 고성능 수동 핸드밀입니다. 정밀 가공된 코니컬 버와 흔들림 없는 축 설계가 커피가루의 미분 발생을 억제하고 이상적인 입도 밸런스를 균일하게 밀링해 냅니다.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="border-t border-billiard-bright/40 pt-4 mt-8 flex justify-between items-center text-[10px] text-gray-500 font-mono">
+                        <span>GRIND TYPE</span>
+                        <span class="text-billiard-gold font-bold">Pentagon Stainless Steel Burr</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE BREW ASSISTANT SECTION -->
+    <section id="brew-assistant" class="py-24 bg-billiard-deep scroll-mt-20">
+        <div class="max-w-5xl mx-auto px-6">
+            
+            <div class="text-center max-w-xl mx-auto mb-16 space-y-3">
+                <span class="text-billiard-gold font-serif italic text-base">Drip Assistant</span>
+                <h2 class="text-2xl md:text-3xl font-bold font-serif">정인성 바리스타의 '4666 레시피'</h2>
+                <p class="text-xs text-gray-400 leading-relaxed max-w-md mx-auto">
+                    약배전 에티오피아 원두의 화사함과 풍요로운 단맛을 깔끔하게 추출해 내기 위해, 뜸들이기 포함 4회로 나누어 붓는 정석 가이드라인입니다. (원두 20g 기준)
+                </p>
+            </div>
+
+            <!-- Brew Interactive Device GUI -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+                
+                <!-- Left Column: Visual scale with timer -->
+                <div class="lg:col-span-5 bg-gradient-to-b from-billiard-cloth to-billiard-deep border border-billiard-gold/30 rounded-3xl p-6 flex flex-col justify-between shadow-2xl min-h-[460px]">
+                    
+                    <!-- Scale Header -->
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2 text-[10px] tracking-widest text-billiard-gold uppercase font-mono">
+                            <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                            <span>BREWSCALE PRO v1.0</span>
+                        </div>
+                        <i class="fa-solid fa-wifi text-xs text-billiard-gold opacity-50"></i>
+                    </div>
+
+                    <!-- Kettle & Cup Central Area -->
+                    <div class="relative py-8 flex flex-col items-center justify-center">
+                        <!-- Simulated hot steam elements (Dynamic display) -->
+                        <div id="steam-container" class="absolute top-2 flex space-x-1.5 hidden">
+                            <div class="w-1 h-8 bg-billiard-ivory/30 rounded-full blur-[1px] steam-effect" style="animation-delay: 0s;"></div>
+                            <div class="w-[2px] h-10 bg-billiard-ivory/20 rounded-full blur-[1.5px] steam-effect" style="animation-delay: 0.8s;"></div>
+                            <div class="w-1.5 h-7 bg-billiard-ivory/30 rounded-full blur-[1px] steam-effect" style="animation-delay: 1.5s;"></div>
+                        </div>
+                        
+                        <div class="w-28 h-28 rounded-full border-4 border-billiard-bright/50 flex items-center justify-center bg-billiard-deep shadow-inner transition-colors duration-500" id="kettle-ring">
+                            <i class="fa-solid fa-mug-hot text-4xl text-billiard-gold transition-transform duration-300" id="scale-cup-icon"></i>
+                        </div>
+                        <div class="text-[10px] text-gray-500 font-mono mt-3 tracking-widest">DRIPPER IN PLACE</div>
+                    </div>
+
+                    <!-- Scale Digital Display -->
+                    <div class="bg-black/40 border border-billiard-bright/40 p-5 rounded-2xl flex justify-between items-center font-mono">
+                        <div>
+                            <span class="block text-[8px] text-gray-500 uppercase">Brewing Timer</span>
+                            <span id="scale-time-text" class="text-3xl font-extrabold text-billiard-ivory">00:00</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="block text-[8px] text-gray-500 uppercase">Target Water (누적 물의 양)</span>
+                            <span class="text-3xl font-extrabold text-billiard-gold" id="scale-weight-text">0.0<span class="text-xs font-normal text-billiard-gold/60 ml-0.5">g</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Controller button -->
+                    <button id="brew-timer-toggle-btn" class="w-full py-4 bg-billiard-gold hover:bg-white text-billiard-deep font-bold rounded-xl text-xs uppercase tracking-widest transition-all duration-300 shadow-lg flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-play" id="btn-icon"></i>
+                        <span id="btn-text">추출 가이드 시작 (Start Brew)</span>
+                    </button>
+
+                </div>
+
+                <!-- Right Column: Interactive step-by-step progress cards -->
+                <div class="lg:col-span-7 flex flex-col justify-between space-y-4">
+                    
+                    <!-- Progress Step 1: Bloom -->
+                    <div class="step-card bg-billiard-cloth/20 border border-billiard-bright/40 px-6 py-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 opacity-60" id="step-card-0">
+                        <div class="flex items-center space-x-4">
+                            <div class="step-num w-8 h-8 rounded-full bg-billiard-deep border border-billiard-bright flex items-center justify-center text-[11px] font-bold text-gray-400 font-mono">01</div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-billiard-ivory">뜸 들이기 (Pre-wetting)</h4>
+                                <p class="text-[11px] text-gray-400 mt-0.5">원두에 골고루 물을 부어 이산화탄소를 방출하고 원두를 촉촉하게 예열합니다.</p>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono min-w-[70px]">
+                            <span class="block text-[10px] text-billiard-gold font-bold">40g 주수</span>
+                            <span class="text-[9px] text-gray-500">00:00 - 00:30</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Step 2: First Pour -->
+                    <div class="step-card bg-billiard-cloth/20 border border-billiard-bright/40 px-6 py-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 opacity-60" id="step-card-1">
+                        <div class="flex items-center space-x-4">
+                            <div class="step-num w-8 h-8 rounded-full bg-billiard-deep border border-billiard-bright flex items-center justify-center text-[11px] font-bold text-gray-400 font-mono">02</div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-billiard-ivory">1차 푸어링 (Acidity extraction)</h4>
+                                <p class="text-[11px] text-gray-400 mt-0.5">에티오피아 산지 본연의 향미와 상큼한 시트러스 산미 성분을 중점적으로 뽑아냅니다.</p>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono min-w-[70px]">
+                            <span class="block text-[10px] text-billiard-gold font-bold">60g (누적 100g)</span>
+                            <span class="text-[9px] text-gray-500">00:30 - 01:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Step 3: Second Pour -->
+                    <div class="step-card bg-billiard-cloth/20 border border-billiard-bright/40 px-6 py-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 opacity-60" id="step-card-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="step-num w-8 h-8 rounded-full bg-billiard-deep border border-billiard-bright flex items-center justify-center text-[11px] font-bold text-gray-400 font-mono">03</div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-billiard-ivory">2차 푸어링 (Sweetness & Body)</h4>
+                                <p class="text-[11px] text-gray-400 mt-0.5">주입 수압을 살짝 조절하며 은은하고 고소한 단맛 성분과 진한 바디 볼륨을 이끌어 냅니다.</p>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono min-w-[70px]">
+                            <span class="block text-[10px] text-billiard-gold font-bold">60g (누적 160g)</span>
+                            <span class="text-[9px] text-gray-500">01:00 - 01:30</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Step 4: Third Pour -->
+                    <div class="step-card bg-billiard-cloth/20 border border-billiard-bright/40 px-6 py-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 opacity-60" id="step-card-3">
+                        <div class="flex items-center space-x-4">
+                            <div class="step-num w-8 h-8 rounded-full bg-billiard-deep border border-billiard-bright flex items-center justify-center text-[11px] font-bold text-gray-400 font-mono">04</div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-billiard-ivory">3차 푸어링 (Extraction finishing)</h4>
+                                <p class="text-[11px] text-gray-400 mt-0.5">추출 후반부로 가기 전, 미분이 뭉치지 않도록 물줄기를 가만히 조율하여 농도를 마감합니다.</p>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono min-w-[70px]">
+                            <span class="block text-[10px] text-billiard-gold font-bold">60g (누적 220g)</span>
+                            <span class="text-[9px] text-gray-500">01:30 - 02:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Step 5: Finish & Dilute -->
+                    <div class="step-card bg-billiard-cloth/20 border border-billiard-bright/40 px-6 py-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 opacity-60" id="step-card-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="step-num w-8 h-8 rounded-full bg-billiard-deep border border-billiard-bright flex items-center justify-center text-[11px] font-bold text-gray-400 font-mono">05</div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-billiard-ivory">추출 완료 및 가수 (Dilution / Bypass)</h4>
+                                <p class="text-[11px] text-gray-400 mt-0.5">추출한 원액에 기호에 맞춰 80g ~ 100g 수준의 깨끗한 물을 희석해 맑게 완성합니다.</p>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono min-w-[70px]">
+                            <span class="block text-[10px] text-billiard-gold font-bold">+80g ~ 100g 가수</span>
+                            <span class="text-[9px] text-gray-500">02:00 ~</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 bg-billiard-deep border-t border-billiard-bright/10 text-gray-500 text-xs">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 bg-billiard-bright rounded-full flex items-center justify-center text-[10px] text-billiard-gold">4</div>
+                <span class="tracking-widest uppercase font-serif font-semibold text-gray-400">CUE.DEV</span>
+            </div>
+            <p class="text-center md:text-left">
+                © 2026 CUE.DEV. Designed with passion for Billiards & Clean Code. All rights reserved.
+            </p>
+            <div class="flex space-x-6 text-sm">
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-solid fa-blog"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Toast Notification for Timer Cues -->
+    <div id="custom-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+        <div class="bg-billiard-cloth border border-billiard-gold/80 px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3 text-billiard-ivory">
+            <div class="w-8 h-8 rounded-full bg-billiard-gold flex items-center justify-center text-billiard-deep">
+                <i class="fa-solid fa-bell font-bold"></i>
+            </div>
+            <div>
+                <p class="font-bold text-sm" id="toast-title">뜸들이기 돌입</p>
+                <p class="text-xs text-gray-300" id="toast-desc">40g의 뜨거운 물을 원두 골고루 적셔주세요!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TIMING ENGINE JAVASCRIPT -->
+    <script>
+        let audioCtx = null;
+        let timerId = null;
+        let secondsPassed = 0;
+        let isRunning = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Beautiful notification beep matching the coffee shop bell vibe
+        function playSignalSound(frequency, duration) {
+            try {
+                initAudio();
+                if (!audioCtx) return;
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+
+        function showToast(title, desc) {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-desc').textContent = desc;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 4500);
+        }
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Step-by-Step recipe milestone configuration
+        // 4666: Bloom 40g (0-30s), 1st 60g (accumulated 100g, 30-60s), 2nd 60g (accumulated 160g, 60-90s), 3rd 60g (accumulated 220g, 90-120s)
+        const STEPS = [
+            { id: 0, start: 0, end: 29, weight: "40.0", text: "뜸 들이기 단계", desc: "뜨거운 물 40g을 커피 침대에 골고루 부어 가스를 적셔 뿜어냅니다.", notify: "뜸 들이기 개시! 40g 주입" },
+            { id: 1, start: 30, end: 59, weight: "100.0", text: "1차 푸어 단계 (Acidity)", desc: "물 60g을 부어 산미 성분을 적극적으로 극대화합니다. (누적 100g)", notify: "1차 물붓기 시작! 60g 부으세요 (누적 100g)" },
+            { id: 2, start: 60, end: 89, weight: "160.0", text: "2차 푸어 단계 (Sweetness)", desc: "물 60g을 부어 달콤한 단맛과 볼륨감을 추가합니다. (누적 160g)", notify: "2차 물붓기 시작! 60g 부으세요 (누적 160g)" },
+            { id: 3, start: 90, end: 119, weight: "220.0", text: "3차 푸어 단계 (Balancing)", desc: "마지막 물 60g을 부어 깔끔한 균형 성분으로 추출을 매듭짓습니다. (누적 220g)", notify: "마지막 3차 물붓기! 60g 주수 (누적 220g)" },
+            { id: 4, start: 120, end: Infinity, weight: "220.0+", text: "가수 및 드립 분리", desc: "드리퍼 내에 고인 마지막 미분액이 떨어지기 전 분리 후 온수 80~100g을 붓습니다.", notify: "추출 마감! 기호에 맞춰 물을 80~100g 섞어 드세요." }
+        ];
+
+        function updateBrewStepUI() {
+            // Find current step active matching secondsPassed bounds
+            let activeStep = STEPS.find(step => secondsPassed >= step.start && secondsPassed <= step.end);
+            if (!activeStep) activeStep = STEPS[STEPS.length - 1];
+
+            // Update digital weight scale
+            document.getElementById('scale-weight-text').innerHTML = `${activeStep.weight}<span class="text-xs font-normal text-billiard-gold/60 ml-0.5">g</span>`;
+
+            // Style Step Cards to indicate which is current active
+            for (let i = 0; i < 5; i++) {
+                const card = document.getElementById(`step-card-${i}`);
+                if (activeStep.id === i) {
+                    card.classList.remove('opacity-60', 'border-billiard-bright/40');
+                    card.classList.add('opacity-100', 'border-billiard-gold/70', 'bg-billiard-bright/35', 'scale-[1.01]', 'shadow-[0_0_15px_rgba(212,175,55,0.15)]');
+                    // Golden ring animation highlights the current item
+                    card.querySelector('.step-num').classList.add('bg-billiard-gold', 'text-billiard-deep', 'border-billiard-gold');
+                    card.querySelector('.step-num').classList.remove('bg-billiard-deep', 'text-gray-400', 'border-billiard-bright');
+                } else {
+                    card.classList.add('opacity-60', 'border-billiard-bright/40');
+                    card.classList.remove('opacity-100', 'border-billiard-gold/70', 'bg-billiard-bright/35', 'scale-[1.01]', 'shadow-[0_0_15px_rgba(212,175,55,0.15)]');
+                    card.querySelector('.step-num').classList.remove('bg-billiard-gold', 'text-billiard-deep', 'border-billiard-gold');
+                    card.querySelector('.step-num').classList.add('bg-billiard-deep', 'text-gray-400', 'border-billiard-bright');
+                }
+            }
+
+            // Milestone sound alerts and notification toaster cues
+            const matchingTrigger = STEPS.find(step => step.start === secondsPassed);
+            if (matchingTrigger) {
+                // Play beautiful bell sound
+                playSignalSound(987.77, 0.45); // High B note bell
+                setTimeout(() => playSignalSound(1318.51, 0.6), 150); // High E note harmony bell
+                
+                showToast(matchingTrigger.text, matchingTrigger.notify);
+            }
+        }
+
+        function runTimer() {
+            secondsPassed++;
+            document.getElementById('scale-time-text').textContent = formatTime(secondsPassed);
+            updateBrewStepUI();
+        }
+
+        // Button interface controls
+        const toggleBtn = document.getElementById('brew-timer-toggle-btn');
+        const cupIcon = document.getElementById('scale-cup-icon');
+        const kettleRing = document.getElementById('kettle-ring');
+        const steamContainer = document.getElementById('steam-container');
+
+        toggleBtn.addEventListener('click', () => {
+            initAudio();
+            
+            if (!isRunning) {
+                // START DRIP TIMER
+                isRunning = true;
+                toggleBtn.innerHTML = `<i class="fa-solid fa-circle-stop" id="btn-icon"></i><span id="btn-text">추출 일시정지 (Pause)</span>`;
+                toggleBtn.classList.remove('bg-billiard-gold');
+                toggleBtn.classList.add('bg-red-700', 'text-white');
+                
+                // Visual indicators
+                cupIcon.classList.add('scale-110', 'text-billiard-gold');
+                kettleRing.classList.remove('border-billiard-bright/50');
+                kettleRing.classList.add('border-billiard-gold', 'bg-billiard-cloth/40');
+                steamContainer.classList.remove('hidden');
+
+                // Beep starter
+                playSignalSound(523.25, 0.3); // High C note start beep
+
+                // Loop
+                timerId = setInterval(runTimer, 1000);
+            } else {
+                // STOP/PAUSE TIMER
+                isRunning = false;
+                toggleBtn.innerHTML = `<i class="fa-solid fa-play" id="btn-icon"></i><span id="btn-text">추출 이어서 진행 (Resume)</span>`;
+                toggleBtn.classList.add('bg-billiard-gold');
+                toggleBtn.classList.remove('bg-red-700', 'text-white');
+
+                // Visual freeze
+                cupIcon.classList.remove('scale-110');
+                kettleRing.classList.add('border-billiard-bright/50');
+                kettleRing.classList.remove('border-billiard-gold', 'bg-billiard-cloth/40');
+                steamContainer.classList.add('hidden');
+
+                clearInterval(timerId);
+                timerId = null;
+            }
+        });
+
+    </script>
+</body>
+</html>

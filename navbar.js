@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isStrengths = page === 'strengths.html';
     const isPlayZone = page === 'play_zone.html';
     const isRanking = page === 'ranking.html';
+    const isCoffee = page === 'coffee.html';
 
     // Active Tab styles
     const activeClass = "py-2 text-billiard-gold border-b-2 border-billiard-gold font-bold transition-all duration-300";
@@ -83,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="strengths.html" class="${isStrengths ? activeClass : inactiveClass}">기술스택</a>
                 <a href="play_zone.html" class="${isPlayZone ? activeClass : inactiveClass}">당구게임</a>
                 <a href="ranking.html" class="${isRanking ? activeClass : inactiveClass}">랭킹</a>
+                <a href="coffee.html" class="${isCoffee ? activeClass : inactiveClass}">핸드드립</a>
                 
                 <!-- Dynamic Login/Profile section -->
                 <div id="desktop-user-container">
@@ -102,8 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="strengths.html" class="${isStrengths ? mobileActiveClass : mobileInactiveClass}">기술스택</a>
             <a href="play_zone.html" class="${isPlayZone ? mobileActiveClass : mobileInactiveClass}">당구게임</a>
             <a href="ranking.html" class="${isRanking ? mobileActiveClass : mobileInactiveClass}">랭킹</a>
-            
-            <div id="mobile-user-container">
+            <a href="coffee.html" class="${isCoffee ? mobileActiveClass : mobileInactiveClass}">핸드드립</a>
                 ${mobileUserMenuHTML}
             </div>
         </div>
