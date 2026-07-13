@@ -251,6 +251,15 @@
                 <span class="block text-[10px] text-gray-400 uppercase tracking-widest">Final Score</span>
                 <span id="modal-final-score" class="text-4xl font-extrabold font-mono text-billiard-gold">0 / 10 점</span>
             </div>
+
+            <!-- 랭킹 등록 폼 -->
+            <div class="bg-billiard-deep/60 border border-billiard-bright/60 p-4 rounded-2xl max-w-md mx-auto space-y-3">
+                <label class="block text-xs font-bold text-billiard-gold uppercase tracking-widest text-left"><i class="fa-solid fa-user-pen mr-1.5"></i> 명예의 전당 랭킹 등록</label>
+                <div class="flex gap-2">
+                    <input type="text" id="rank-name-input" maxlength="10" placeholder="닉네임을 입력하세요 (최대 10자)" class="flex-1 bg-billiard-deep text-billiard-ivory px-3 py-2 rounded-lg border border-billiard-bright/80 focus:outline-none focus:border-billiard-gold text-sm" />
+                    <button id="submit-ranking-btn" class="px-5 py-2 bg-billiard-gold text-billiard-deep font-bold rounded-lg hover:bg-billiard-ivory text-xs transition-all duration-300 shadow-[0_0_10px_rgba(212,175,55,0.3)]">등록</button>
+                </div>
+            </div>
             
             <div class="space-y-3 text-left">
                 <h4 class="text-xs font-bold text-billiard-gold uppercase tracking-wider flex items-center">
@@ -1091,10 +1100,73 @@
             setupTable();
         }
 
+        // 랭킹 등록 이벤트 리스너 추가
+        document.getElementById('submit-ranking-btn').addEventListener('click', () => {
+            const nameInput = document.getElementById('rank-name-input');
+            const nickname = nameInput.value.trim();
+            
+            if (!nickname) {
+                showToast('닉네임 입력 필요', '명예의 전당에 등록할 닉네임을 입력해 주세요!');
+                return;
+            }
+
+            // 로컬 스토리지 기존 랭킹 로드
+            let currentRankings = JSON.parse(localStorage.getItem('billiard_rankings')) || [];
+            
+            // 난이도 이름 한글 변환
+            let handicapKo = "중급자";
+            if (currentHandicap === "beginner") handicapKo = "초급자";
+            if (currentHandicap === "advanced") handicapKo = "상급자";
+
+            const newRecord = {
+                id: Date.now(),
+                name: nickname,
+                handicap: handicapKo,
+                score: score,
+                date: new Date().toLocaleDateString('ko-KR')
+            };
+
+            currentRankings.push(newRecord);
+            
+            // 점수 기준 내림차순 정렬 (점수가 같으면 최근 등록일 순)
+            currentRankings.sort((a, b) => b.score - a.score || b.id - a.id);
+
+            // 로컬 스토리지에 보존
+            localStorage.setItem('billiard_rankings', JSON.stringify(currentRankings));
+
+            showToast('랭킹 등록 완료!', '명예의 전당 랭킹 페이지로 이동합니다.');
+            nameInput.value = '';
+
+            // 1초 뒤 랭킹 페이지로 전환
+            setTimeout(() => {
+                window.location.href = 'ranking.html';
+            }, 1000);
+        });
+
         function resizeCanvas() {
             canvas.width = 800;
             canvas.height = 400;
             setupTable();
+        }
+
+        function checkUserProfile() {
+            const userStr = localStorage.getItem('billiard_user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                
+                // 로그인된 유저의 핸디캡을 셀렉트 박스에 매핑
+                const handicapSelect = document.getElementById('handicap-select');
+                if (handicapSelect) {
+                    handicapSelect.value = user.handicap;
+                    currentHandicap = user.handicap;
+                }
+                
+                // 최종 모달 창의 닉네임 폼에 자동 입력 처리
+                const rankNameInput = document.getElementById('rank-name-input');
+                if (rankNameInput) {
+                    rankNameInput.value = user.name;
+                }
+            }
         }
 
         function animate() {
@@ -1313,7 +1385,8 @@
         });
 
         window.onload = function() {
-            updatePresetDropdown();
+            checkUserProfile(); // 1. 로그인 상태 확인 및 수지 사전 동기화
+            updatePresetDropdown(); // 2. 수지에 맞는 배치 프리셋 바인딩
             resizeCanvas();
             animate();
         };

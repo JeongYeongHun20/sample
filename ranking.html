@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>완벽한 한 큐 - 명예의 전당</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Global Navigation Module -->
+    <script src="navbar.js" defer></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        billiard: {
+                            deep: '#051811',
+                            cloth: '#0b3c26',
+                            bright: '#135c3b',
+                            gold: '#d4af37',
+                            wood: '#5c2c16',
+                            ivory: '#fbfaf5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-billiard-deep text-billiard-ivory font-sans overflow-x-hidden min-h-screen flex flex-col justify-between">
+
+    <!-- LEADERBOARD MAIN CONTENT -->
+    <section class="py-32 flex-1 flex items-center">
+        <div class="max-w-4xl mx-auto px-6 w-full">
+            <div class="text-center max-w-2xl mx-auto mb-12 space-y-4">
+                <span class="text-billiard-gold font-serif italic text-lg block">Hall of Fame</span>
+                <h2 class="text-3xl md:text-5xl font-bold font-serif tracking-tight">명예의 전당 실시간 랭킹</h2>
+                <p class="text-gray-300 text-sm md:text-base">
+                    정밀 타격 훈련소 10회 도전을 완벽하게 클리어한 실력파 랭커들의 기록 보드입니다. 높은 점수를 획득하여 상위 랭크를 점령해 보세요!
+                </p>
+            </div>
+
+            <!-- LEADERBOARD PANEL -->
+            <div class="bg-billiard-cloth/30 border border-billiard-bright/50 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-48 h-48 bg-billiard-gold/10 rounded-full blur-[60px] pointer-events-none"></div>
+
+                <!-- FILTER CONTROLS -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pb-6 border-b border-billiard-bright/40">
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterRankings('all')" id="filter-all-btn" class="px-4 py-2 bg-billiard-gold text-billiard-deep font-bold rounded-lg text-xs transition-all">전체</button>
+                        <button onclick="filterRankings('초급자')" id="filter-beg-btn" class="px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all">초급자</button>
+                        <button onclick="filterRankings('중급자')" id="filter-int-btn" class="px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all">중급자</button>
+                        <button onclick="filterRankings('상급자')" id="filter-adv-btn" class="px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all">상급자</button>
+                    </div>
+                    <div>
+                        <button onclick="resetRankingsToDefault()" class="text-xs text-gray-400 hover:text-red-400 transition-colors">
+                            <i class="fa-solid fa-rotate mr-1"></i>랭킹 데이터 초기화
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TABLE WRAPPER -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-billiard-bright/40 text-xs font-bold text-billiard-gold uppercase tracking-wider">
+                                <th class="pb-3 text-center w-16">순위</th>
+                                <th class="pb-3">닉네임</th>
+                                <th class="pb-3">나의 수지</th>
+                                <th class="pb-3 text-center">도전 성공 점수</th>
+                                <th class="pb-3 text-right">등록 일자</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ranking-list-body" class="divide-y divide-billiard-bright/20 text-sm">
+                            <!-- JS에 의해 실시간 바인딩됩니다. -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- EMPTY DATA FALLBACK -->
+                <div id="empty-state" class="hidden text-center py-12">
+                    <i class="fa-solid fa-ranking-star text-4xl text-billiard-gold/30 mb-3 block"></i>
+                    <p class="text-sm text-gray-400">아직 등록된 랭킹 정보가 없습니다. 첫 랭커가 되어 보세요!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Reset Warning Confirmation Modal (Replacing standard confirm) -->
+    <div id="reset-confirm-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-billiard-cloth border border-red-800/80 p-6 rounded-2xl max-w-sm w-full space-y-4 text-center shadow-2xl">
+            <div class="w-12 h-12 rounded-full bg-red-950 text-red-500 flex items-center justify-center text-xl mx-auto border border-red-800/40">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-base text-billiard-ivory font-serif">랭킹 테이블 공장 초기화</h4>
+                <p class="text-xs text-gray-400 mt-1">모든 유저 기록이 소멸하고 초기 개발자 데이터로 복원됩니다. 정말 진행하시겠습니까?</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeResetModal()" class="flex-1 py-2.5 bg-billiard-deep border border-billiard-bright/40 rounded-xl text-xs hover:bg-billiard-bright text-gray-300 transition-colors">취소</button>
+                <button onclick="executeResetRankings()" class="flex-1 py-2.5 bg-red-900 hover:bg-red-800 text-white font-bold rounded-xl text-xs transition-colors">초기화 진행</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-12 bg-billiard-deep border-t border-billiard-bright/10 text-gray-500 text-xs">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 bg-billiard-bright rounded-full flex items-center justify-center text-[10px] text-billiard-gold">4</div>
+                <span class="tracking-widest uppercase font-serif font-semibold text-gray-400">CUE.DEV</span>
+            </div>
+            <p class="text-center md:text-left">
+                © 2026 CUE.DEV. Designed with passion for Billiards & Clean Code. All rights reserved.
+            </p>
+            <div class="flex space-x-6 text-sm">
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-solid fa-blog"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Toast Alert -->
+    <div id="custom-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+        <div class="bg-billiard-cloth border border-billiard-gold/80 px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3 text-billiard-ivory">
+            <div class="w-8 h-8 rounded-full bg-billiard-gold flex items-center justify-center text-billiard-deep">
+                <i class="fa-solid fa-check font-bold"></i>
+            </div>
+            <div>
+                <p class="font-bold text-sm" id="toast-title">복사 완료!</p>
+                <p class="text-xs text-gray-300" id="toast-desc">복사되었습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LEADERBOARD LOGIC -->
+    <script>
+        // 더미 데이터 (로컬 스토리지에 아무 기록이 없을 때 자동으로 노출될 개발자 친화형 데이터)
+        const DEFAULT_RANKERS = [
+            { id: 1, name: "광주야스칼_백엔드", handicap: "상급자", score: 10, date: "2026. 7. 10." },
+            { id: 2, name: "싸피4구마스터", handicap: "상급자", score: 9, date: "2026. 7. 11." },
+            { id: 3, name: "오시정석코더", handicap: "중급자", score: 8, date: "2026. 7. 12." },
+            { id: 4, name: "끌어치기빌런", handicap: "중급자", score: 7, date: "2026. 7. 13." },
+            { id: 5, name: "입문자당린이", handicap: "초급자", score: 5, date: "2026. 7. 13." }
+        ];
+
+        let loadedRankings = [];
+        let currentFilter = 'all';
+
+        // 1. 데이터 로드 및 초기화
+        function initRankingData() {
+            const localData = localStorage.getItem('billiard_rankings');
+            if (!localData) {
+                // 로컬 스토리지가 비었으면 세련된 기본 데이터로 초기화
+                localStorage.setItem('billiard_rankings', JSON.stringify(DEFAULT_RANKERS));
+                loadedRankings = [...DEFAULT_RANKERS];
+            } else {
+                loadedRankings = JSON.parse(localData);
+            }
+            renderRankings();
+        }
+
+        // 2. 리스트 바인딩 및 렌더링
+        function renderRankings() {
+            const listBody = document.getElementById('ranking-list-body');
+            const emptyState = document.getElementById('empty-state');
+            listBody.innerHTML = '';
+
+            // 현재 로그인된 유저가 존재한다면 비교용 객체 획득
+            const userStr = localStorage.getItem('billiard_user');
+            const loggedInUser = userStr ? JSON.parse(userStr) : null;
+
+            // 필터 적용
+            const filtered = loadedRankings.filter(item => {
+                if (currentFilter === 'all') return true;
+                return item.handicap === currentFilter;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                
+                // 로그인된 나의 순위 행일 때 고유한 골드 글로우 스타일 강조 적용
+                const isMyRecord = loggedInUser && (item.name === loggedInUser.name);
+                if (isMyRecord) {
+                    tr.className = "bg-billiard-gold/10 border-y border-billiard-gold/30 hover:bg-billiard-gold/15 transition-colors font-semibold";
+                } else {
+                    tr.className = "hover:bg-billiard-cloth/20 transition-colors";
+                }
+
+                // 메달 순위 스타일링
+                let rankDisplay = `<span class="font-mono">${index + 1}</span>`;
+                if (currentFilter === 'all') {
+                    if (index === 0) rankDisplay = `<i class="fa-solid fa-medal text-yellow-400 text-lg"></i>`;
+                    else if (index === 1) rankDisplay = `<i class="fa-solid fa-medal text-gray-300 text-lg"></i>`;
+                    else if (index === 2) rankDisplay = `<i class="fa-solid fa-medal text-amber-600 text-lg"></i>`;
+                }
+
+                // 당구수지별 태그 스타일링
+                let handicapTag = '';
+                if (item.handicap === '상급자') {
+                    handicapTag = `<span class="px-2.5 py-0.5 rounded-full text-[10px] bg-red-950/80 text-red-400 border border-red-800/40 font-normal">상급자 (300)</span>`;
+                } else if (item.handicap === '중급자') {
+                    handicapTag = `<span class="px-2.5 py-0.5 rounded-full text-[10px] bg-yellow-950/80 text-billiard-gold border border-billiard-gold/40 font-normal">중급자 (150-250)</span>`;
+                } else {
+                    handicapTag = `<span class="px-2.5 py-0.5 rounded-full text-[10px] bg-emerald-950/80 text-emerald-400 border border-emerald-800/40 font-normal">초급자 (80-120)</span>`;
+                }
+
+                // 닉네임 필드 설계 - 로그인 본인의 경우 (나) 배지 마킹
+                const myBadge = isMyRecord ? `<span class="ml-2 px-1.5 py-0.5 bg-billiard-gold text-billiard-deep text-[9px] font-extrabold rounded-md shadow-sm align-middle"><i class="fa-solid fa-user-check mr-0.5"></i>나</span>` : '';
+
+                tr.innerHTML = `
+                    <td class="py-4 text-center font-bold">${rankDisplay}</td>
+                    <td class="py-4 text-billiard-ivory">${escapeHTML(item.name)}${myBadge}</td>
+                    <td class="py-4">${handicapTag}</td>
+                    <td class="py-4 text-center font-bold font-mono text-billiard-gold text-base">${item.score} / 10</td>
+                    <td class="py-4 text-right text-xs text-gray-400">${item.date}</td>
+                `;
+                listBody.appendChild(tr);
+            });
+        }
+
+        // HTML Escape 방지용 헬퍼 함수
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // 3. 필터 제어 함수
+        function filterRankings(filterType) {
+            currentFilter = filterType;
+            
+            // 모든 버튼 기본 클래스 리셋
+            const btns = [
+                { id: 'filter-all-btn', type: 'all' },
+                { id: 'filter-beg-btn', type: '초급자' },
+                { id: 'filter-int-btn', type: '중급자' },
+                { id: 'filter-adv-btn', type: '상급자' }
+            ];
+
+            btns.forEach(btn => {
+                const el = document.getElementById(btn.id);
+                if (btn.type === filterType) {
+                    el.className = "px-4 py-2 bg-billiard-gold text-billiard-deep font-bold rounded-lg text-xs transition-all shadow-[0_0_10px_rgba(212,175,55,0.2)]";
+                } else {
+                    el.className = "px-4 py-2 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg border border-billiard-bright/40 text-xs transition-all";
+                }
+            });
+
+            renderRankings();
+        }
+
+        // 4. 강제 초기화 트리거 제어 (confirm 대체 커스텀 모달)
+        function resetRankingsToDefault() {
+            const modal = document.getElementById('reset-confirm-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('reset-confirm-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function executeResetRankings() {
+            localStorage.setItem('billiard_rankings', JSON.stringify(DEFAULT_RANKERS));
+            loadedRankings = [...DEFAULT_RANKERS];
+            closeResetModal();
+            filterRankings('all');
+            showToast('초기화 완료', '명예의 전당 점수가 기본값으로 리프레시되었습니다.');
+        }
+
+        // 토스트 알림 제어
+        function showToast(title, desc) {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-desc').textContent = desc;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        }
+
+        // 로드 시 자동 이행
+        window.onload = function() {
+            initRankingData();
+        };
+    </script>
+</body>
+</html>
