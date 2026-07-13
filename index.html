@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>완벽한 한 큐 - 철학</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Global Navigation Module -->
+    <script src="navbar.js" defer></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        billiard: {
+                            deep: '#051811',
+                            cloth: '#0b3c26',
+                            bright: '#135c3b',
+                            gold: '#d4af37',
+                            wood: '#5c2c16',
+                            ivory: '#fbfaf5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa7c11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-billiard-deep text-billiard-ivory font-sans overflow-x-hidden">
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden">
+        <div class="absolute inset-0 opacity-15 pointer-events-none">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[2px] bg-gradient-to-r from-transparent via-billiard-gold to-transparent rotate-[35deg]"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[4px] bg-gradient-to-r from-transparent via-billiard-wood to-transparent rotate-[35deg] translate-y-10"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-6 text-center relative z-10 py-12">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-billiard-cloth/50 border border-billiard-bright text-billiard-gold text-xs tracking-[0.25em] uppercase mb-8">
+                <i class="fa-solid fa-circle-dot"></i>
+                <span>Premium Billiard Concept</span>
+            </div>
+
+            <h1 class="text-4xl md:text-7xl font-serif leading-tight font-bold tracking-tight mb-8">
+                완벽한 한 큐를 고민하듯<br>
+                <span class="text-gold-gradient font-serif italic">신중하게 코드를 씁니다</span>
+            </h1>
+
+            <p class="text-gray-300 max-w-2xl mx-auto text-base md:text-xl leading-relaxed mb-12">
+                광주 북구에서 묵묵하게 저만의 실력을 다지며, 정교한 설계와 끈질긴 디버깅으로 동료들에게 신뢰를 주는 SSAFY 백엔드 개발자입니다.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="play_zone.html" class="px-8 py-4 bg-billiard-gold text-billiard-deep font-bold rounded-lg hover:bg-billiard-ivory hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] transition-all duration-300 flex items-center justify-center space-x-2">
+                    <span>수지별 정석 배치 도전하기</span>
+                    <i class="fa-solid fa-play"></i>
+                </a>
+                <a href="#about" class="px-8 py-4 bg-billiard-cloth/40 hover:bg-billiard-cloth border border-billiard-bright hover:border-billiard-gold/50 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2">
+                    <span>나의 철학 읽기</span>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY / ABOUT SECTION -->
+    <section id="about" class="py-24 border-y border-billiard-bright/20 bg-billiard-deep/50 relative scroll-mt-20">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-7 space-y-8">
+                    <div class="space-y-3">
+                        <span class="text-billiard-gold font-serif italic text-lg block">True Focus</span>
+                        <h2 class="text-3xl md:text-4xl font-bold font-serif tracking-tight">당구대 앞에서 배운<br>백엔드 설계의 자세</h2>
+                    </div>
+
+                    <p class="text-gray-300 leading-relaxed text-base md:text-lg">
+                        당구는 단순한 힘겨루기가 아닙니다. 큐를 밀어내기 전, 수구와 적구의 미세한 각도와 회전, 쿠션에 부딪힌 이후의 세밀한 물리법칙까지 완벽하게 계산해야만 득점을 따낼 수 있습니다.
+                    </p>
+
+                    <p class="text-gray-300 leading-relaxed text-base md:text-lg">
+                        코드 또한 마찬가지입니다. 시스템에 데이터가 밀려들기 전, 데이터베이스 인덱싱 설계부터 동시성 제어, 트랜잭션 범위까지 정교하게 조율되어야만 단 한 차례의 꼬임 없이 안정적인 서비스를 이어갈 수 있습니다. 
+                        <strong>'단 한 큐에 성공시키는 로직'</strong>을 위해 오늘도 깊이 고민합니다.
+                    </p>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 pt-6">
+                        <div class="border-l-2 border-billiard-gold pl-4 py-2">
+                            <span class="block text-2xl font-serif font-bold text-billiard-gold">Gwangju</span>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest">활동 기지 (북구)</span>
+                        </div>
+                        <div class="border-l-2 border-billiard-gold pl-4 py-2">
+                            <span class="block text-2xl font-serif font-bold text-billiard-gold">SSAFY</span>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest">치열한 몰입 교육생</span>
+                        </div>
+                        <div class="border-l-2 border-billiard-gold pl-4 py-2">
+                            <span class="block text-2xl font-serif font-bold text-billiard-gold">Billiards</span>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest">몰입의 또 다른 이름</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: SVG Geometric Angle Concept Art -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-sm rounded-2xl bg-billiard-cloth/20 p-8 border border-billiard-bright/40 shadow-inner flex flex-col justify-center items-center h-80">
+                        <svg class="w-48 h-48 text-billiard-gold opacity-80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="10" width="180" height="180" rx="8" stroke="#135c3b" stroke-width="2" stroke-dasharray="4 4" />
+                            <path d="M40 160 L100 40 L160 100" stroke="#d4af37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="100" cy="40" r="12" fill="#e03131" />
+                            <circle cx="160" cy="100" r="12" fill="#e03131" />
+                            <circle cx="40" cy="160" r="12" fill="#fbfaf5" />
+                            <circle cx="40" cy="160" r="2" fill="#e03131" />
+                            <path d="M 85 70 A 30 30 0 0 1 115 70" stroke="#d4af37" stroke-width="1.5" />
+                            <text x="90" y="95" fill="#d4af37" font-size="10" font-family="monospace">theta = 38.5°</text>
+                        </svg>
+                        <div class="text-center mt-4">
+                            <span class="text-xs text-billiard-gold font-serif uppercase tracking-widest">Analytical Trajectory Simulation</span>
+                            <p class="text-[11px] text-gray-400 mt-1">철저히 계산된 궤적 안에서 버그는 존재할 수 없습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 bg-billiard-deep border-t border-billiard-bright/10 text-gray-500 text-xs">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 bg-billiard-bright rounded-full flex items-center justify-center text-[10px] text-billiard-gold">4</div>
+                <span class="tracking-widest uppercase font-serif font-semibold text-gray-400">CUE.DEV</span>
+            </div>
+            <p class="text-center md:text-left">
+                © 2026 CUE.DEV. Designed with passion for Billiards & Clean Code. All rights reserved.
+            </p>
+            <div class="flex space-x-6 text-sm">
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-solid fa-blog"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

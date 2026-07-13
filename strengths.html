@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>완벽한 한 큐 - 기술스택</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Global Navigation Module -->
+    <script src="navbar.js" defer></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        billiard: {
+                            deep: '#051811',
+                            cloth: '#0b3c26',
+                            bright: '#135c3b',
+                            gold: '#d4af37',
+                            wood: '#5c2c16',
+                            ivory: '#fbfaf5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-billiard-deep text-billiard-ivory font-sans overflow-x-hidden">
+
+    <!-- TECHNOLOGY STACK (GEARS) SECTION -->
+    <section class="py-32 bg-gradient-to-b from-billiard-deep to-billiard-cloth/30 min-h-screen flex items-center">
+        <div class="max-w-6xl mx-auto px-6 w-full">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <span class="text-billiard-gold font-serif italic text-lg block">My Gears & Stacks</span>
+                <h2 class="text-3xl md:text-4xl font-bold font-serif">완벽한 설계를 위한 백엔드 장비함</h2>
+                <p class="text-gray-300 text-sm md:text-base">
+                    단 하나의 빈틈도 허용하지 않는 견고한 웹 생태계를 구축하기 위해 제가 손에 익히고 숙련해 온 주력 백엔드 기술 스택 목록입니다.
+                </p>
+            </div>
+
+            <!-- Stacks Gearbox Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Stack 1: Java & Spring -->
+                <div class="bg-billiard-cloth p-8 rounded-2xl border border-billiard-gold/20 shadow-lg relative overflow-hidden hover:border-billiard-gold/60 transition-all duration-300 group hover:-translate-y-1">
+                    <div class="absolute right-4 top-4 text-billiard-gold/10 text-7xl font-serif group-hover:scale-110 transition-transform duration-300 select-none">01</div>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-billiard-deep border border-billiard-gold/40 rounded-xl flex items-center justify-center text-billiard-gold text-2xl">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-billiard-gold">Java & Spring Boot</h3>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider">주력 개인 전용 큐 (Main Cue)</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-6">
+                        객체 지향 설계 원칙을 준수하며 Spring Boot 프레임워크의 구조적인 편리함을 활용합니다. 예외 처리 로직 설계 및 MVC 구조 제어에 매우 익숙합니다.
+                    </p>
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-[11px] text-gray-400">
+                            <span>스트로크 정확도 (숙련도)</span>
+                            <span class="text-billiard-gold font-semibold">90%</span>
+                        </div>
+                        <div class="w-full bg-billiard-deep rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gradient-to-r from-billiard-gold to-yellow-400 h-full rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stack 2: Database System -->
+                <div class="bg-billiard-cloth p-8 rounded-2xl border border-billiard-gold/20 shadow-lg relative overflow-hidden hover:border-billiard-gold/60 transition-all duration-300 group hover:-translate-y-1">
+                    <div class="absolute right-4 top-4 text-billiard-gold/10 text-7xl font-serif group-hover:scale-110 transition-transform duration-300 select-none">02</div>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-billiard-deep border border-billiard-gold/40 rounded-xl flex items-center justify-center text-billiard-gold text-2xl">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-billiard-gold">MySQL & RDB</h3>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider">쿠션 고무 가이드 (Table Cushion)</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-6">
+                        밀려드는 트래픽 속에서도 데이터가 올바르고 유연한 각도로 유지되도록 인덱스 설계, 조인 연산 최적화 및 정규화를 거쳐 깨끗한 데이터를 설계합니다.
+                    </p>
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-[11px] text-gray-400">
+                            <span>반사각 예측력 (숙련도)</span>
+                            <span class="text-billiard-gold font-semibold">80%</span>
+                        </div>
+                        <div class="w-full bg-billiard-deep rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gradient-to-r from-billiard-gold to-yellow-400 h-full rounded-full" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stack 3: Git & Collaboration -->
+                <div class="bg-billiard-cloth p-8 rounded-2xl border border-billiard-gold/20 shadow-lg relative overflow-hidden hover:border-billiard-gold/60 transition-all duration-300 group hover:-translate-y-1">
+                    <div class="absolute right-4 top-4 text-billiard-gold/10 text-7xl font-serif group-hover:scale-110 transition-transform duration-300 select-none">03</div>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-billiard-deep border border-billiard-gold/40 rounded-xl flex items-center justify-center text-billiard-gold text-2xl">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-billiard-gold">Git & DevOps</h3>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider">미끄럼 방지용 블루 초크 (Chalk)</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-6">
+                        큐 미스(배포 에러) 없는 매끄러운 릴리즈를 지향합니다. Git 브랜치 전략을 체계적으로 수립하여 팀원들과 마찰 없는 형상 관리 협업 환경을 주도합니다.
+                    </p>
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-[11px] text-gray-400">
+                            <span>큐 그립 밀착도 (숙련도)</span>
+                            <span class="text-billiard-gold font-semibold">85%</span>
+                        </div>
+                        <div class="w-full bg-billiard-deep rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gradient-to-r from-billiard-gold to-yellow-400 h-full rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Focus Status Card -->
+            <div class="mt-12 bg-billiard-cloth/30 border border-billiard-bright/50 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-billiard-gold rounded-full flex items-center justify-center text-billiard-deep text-xl font-bold">
+                        <i class="fa-solid fa-user-clock"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-billiard-ivory font-serif">6 Hours Continuous Concentration</h4>
+                        <p class="text-xs text-gray-400">당구대에 6시간 넘게 집중하듯, 한 번 붙잡은 버그는 끝까지 파고들어 기필코 해결합니다.</p>
+                    </div>
+                </div>
+                <div class="px-5 py-2.5 bg-billiard-bright/40 text-billiard-gold border border-billiard-gold/30 rounded-xl text-xs font-mono select-none uppercase tracking-widest">
+                    Max Concentration Loaded
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 bg-billiard-deep border-t border-billiard-bright/10 text-gray-500 text-xs">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 bg-billiard-bright rounded-full flex items-center justify-center text-[10px] text-billiard-gold">4</div>
+                <span class="tracking-widest uppercase font-serif font-semibold text-gray-400">CUE.DEV</span>
+            </div>
+            <p class="text-center md:text-left">
+                © 2026 CUE.DEV. Designed with passion for Billiards & Clean Code. All rights reserved.
+            </p>
+            <div class="flex space-x-6 text-sm">
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-solid fa-blog"></i></a>
+                <a href="#" class="hover:text-billiard-gold"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
