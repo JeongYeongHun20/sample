@@ -47,6 +47,16 @@
             background-size: 8px 8px;
             background-position: 0 0, 4px 4px;
         }
+
+        /* Hide scrollbars for chrome/safari/opera while maintaining scrolling capability */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbars for ie/edge/firefox */
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 <body class="bg-billiard-deep text-billiard-ivory font-sans overflow-x-hidden">
@@ -58,7 +68,7 @@
                 <span class="text-billiard-gold font-serif italic text-lg">Interactive Training</span>
                 <h2 class="text-3xl md:text-4xl font-bold font-serif">당구 수지별 4구 정석 배치 훈련소</h2>
                 <p class="text-gray-300 text-sm md:text-base">
-                    자신의 평소 당구 수지(핸디캡)를 선택하고 맞춤 연습 배치를 해결해보세요! 정석 해설을 읽어보고 가이드라인을 따라가며 완벽한 각도의 알고리즘을 설계해 봅니다.
+                    자신의 평소 당구 수지(핸디캡)를 선택하고 맞춤 연습 배치를 해결해보세요! 총 10회의 도전 기회가 주어지며, 정석 해설을 읽어보고 가이드라인을 따라가며 완벽한 각도의 알고리즘을 설계해 봅니다.
                 </p>
             </div>
 
@@ -98,20 +108,29 @@
             <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Left Canvas Area -->
                 <div class="lg:col-span-8 space-y-4">
-                    <!-- Premium Scoreboard HUD -->
+                    <!-- Premium Scoreboard HUD (Canvas Top Free Layout) -->
                     <div class="bg-billiard-cloth/40 border border-billiard-gold/30 p-4 rounded-2xl shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-billiard-gold text-billiard-deep rounded-full flex items-center justify-center font-bold font-serif text-lg shadow-[0_0_12px_rgba(212,175,55,0.4)]">
-                                <i class="fa-solid fa-trophy"></i>
+                        <div class="flex items-center space-x-6">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-10 h-10 bg-billiard-gold text-billiard-deep rounded-full flex items-center justify-center font-bold font-serif text-lg shadow-[0_0_12px_rgba(212,175,55,0.4)]">
+                                    <i class="fa-solid fa-trophy"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium">Score</span>
+                                    <span id="html-score-val" class="text-xl font-bold font-mono text-billiard-ivory">0 점</span>
+                                </div>
                             </div>
+                            <div class="h-8 w-[1px] bg-billiard-bright/60 hidden sm:block"></div>
                             <div>
-                                <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium">Training Score</span>
-                                <span id="html-score-val" class="text-xl font-bold font-mono text-billiard-ivory">0 점</span>
+                                <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium">Trial Progress</span>
+                                <span id="html-inning-val" class="text-xl font-bold font-mono text-billiard-gold">1 / 10 회 도전</span>
                             </div>
                         </div>
-                        <div class="w-full sm:flex-1 max-w-md bg-billiard-deep/50 border border-billiard-bright/40 px-4 py-2.5 rounded-xl text-center sm:text-left">
-                            <span class="block text-[9px] text-billiard-gold uppercase tracking-wider font-semibold mb-0.5"><i class="fa-solid fa-circle-info mr-1"></i> 실시간 상태 (Status)</span>
-                            <p id="html-status-text" class="text-xs text-gray-300 font-medium">배치 준비 완료! 수구를 드래그해 샷을 성공시키세요.</p>
+                        <div class="w-full sm:flex-1 max-w-md bg-billiard-deep/50 border border-billiard-bright/40 px-4 py-2.5 rounded-xl text-center sm:text-left flex items-center justify-between gap-2">
+                            <div class="flex-1">
+                                <span class="block text-[9px] text-billiard-gold uppercase tracking-wider font-semibold mb-0.5"><i class="fa-solid fa-circle-info mr-1"></i> 실시간 상태 (Status)</span>
+                                <p id="html-status-text" class="text-xs text-gray-300 font-medium">배치 준비 완료! 수구를 드래그해 샷을 성공시키세요.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -205,7 +224,7 @@
             <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 bg-billiard-cloth/10 border border-billiard-bright/30 p-4 rounded-xl">
                 <div class="flex items-center space-x-3 w-full sm:w-auto">
                     <button id="reset-table-btn" class="w-full sm:w-auto px-5 py-2.5 bg-billiard-bright hover:bg-billiard-gold hover:text-billiard-deep rounded-lg text-sm font-semibold transition-all duration-300 flex items-center justify-center">
-                        <i class="fa-solid fa-rotate-left mr-2"></i>공 재배치 (Reset)
+                        <i class="fa-solid fa-rotate-left mr-2"></i>샷 복구 및 재배치 (Reset)
                     </button>
                     <button id="sound-toggle-btn" class="w-full sm:w-auto px-4 py-2.5 bg-billiard-deep hover:bg-billiard-bright text-billiard-gold rounded-lg text-sm border border-billiard-gold/30 transition-all flex items-center justify-center">
                         <i class="fa-solid fa-volume-high mr-2"></i>Sound ON
@@ -221,6 +240,35 @@
             </div>
         </div>
     </section>
+
+    <!-- 10-Inning Game Over Modal with Carousel -->
+    <div id="game-over-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-billiard-cloth border-2 border-billiard-gold/60 p-6 md:p-8 rounded-3xl max-w-2xl w-full text-center space-y-6 shadow-2xl overflow-hidden relative">
+            <h3 class="text-2xl md:text-3xl font-bold font-serif text-billiard-gold"><i class="fa-solid fa-trophy mr-2"></i>10회 도전 완료!</h3>
+            <p class="text-sm text-gray-300">정해진 10번의 도전을 모두 마쳤습니다. 최종 성적을 검토해 보세요.</p>
+            
+            <div class="inline-block bg-billiard-deep/80 border border-billiard-bright px-8 py-4 rounded-2xl">
+                <span class="block text-[10px] text-gray-400 uppercase tracking-widest">Final Score</span>
+                <span id="modal-final-score" class="text-4xl font-extrabold font-mono text-billiard-gold">0 / 10 점</span>
+            </div>
+            
+            <div class="space-y-3 text-left">
+                <h4 class="text-xs font-bold text-billiard-gold uppercase tracking-wider flex items-center">
+                    <i class="fa-solid fa-circle-exclamation mr-1.5 text-red-500 animate-pulse"></i>
+                    놓친 배치 오답 노트 (가로로 넘겨보세요)
+                </h4>
+                
+                <!-- Horizontal Cards Container -->
+                <div id="missed-carousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 scrollbar-hide snap-x">
+                    <!-- Dynamic cards will go here -->
+                </div>
+            </div>
+            
+            <button id="restart-game-btn" class="px-8 py-3 bg-billiard-gold text-billiard-deep font-bold rounded-xl hover:bg-white transition-colors duration-300 w-full md:w-auto">
+                새로운 훈련 시작하기
+            </button>
+        </div>
+    </div>
 
     <!-- CALL TO ACTION (CTA) SECTION -->
     <section id="cta" class="py-24 bg-billiard-deep relative overflow-hidden border-t border-billiard-bright/20">
@@ -371,7 +419,6 @@
             updateSpinFromCoords(e.clientX, e.clientY);
         });
 
-        // Global Event bindings for drag safety (Drag spin and Cue stick cleanly outside element)
         window.addEventListener('mousemove', (e) => {
             if (isDraggingSpin) {
                 updateSpinFromCoords(e.clientX, e.clientY);
@@ -382,7 +429,6 @@
             isDraggingSpin = false;
         });
 
-        // Touch support
         spinSelector.addEventListener('touchstart', (e) => {
             initAudio();
             isDraggingSpin = true;
@@ -409,6 +455,7 @@
         const BALL_RADIUS = 15;
         
         let balls = [];
+        let savedBallStates = null; // Cache to restore prior states (trial, score, ball positions)
         let cueStick = {
             active: false,
             startX: 0,
@@ -417,22 +464,30 @@
             currentY: 0
         };
 
+        // 10-Trial Game Logic Variables
         let score = 0;
+        let currentTrial = 1;
+        let missedLayouts = [];
+        let gameEnded = false;
+        let nextTrialTimeoutId = null;
+
         let shotActive = false;
         let hasHitRed1 = false;
         let hasHitRed2 = false;
         let hasHitOpponent = false;
         let shotStatusText = "내 공(흰 공)을 드래그하여 목표 배치를 해결해보세요.";
+        
+        let hasShotOnCurrentLayout = false; // Tracks if a shot has been played on the current layout
 
-        // Scoreboard DOM Updater Helper
         function updateScoreboardDOM() {
             const scoreEl = document.getElementById('html-score-val');
+            const inningEl = document.getElementById('html-inning-val');
             const statusEl = document.getElementById('html-status-text');
             if (scoreEl) scoreEl.textContent = `${score} 점`;
+            if (inningEl) inningEl.textContent = `${currentTrial} / 10 회 도전`;
             if (statusEl) statusEl.textContent = shotStatusText;
         }
 
-        // Helper to convert collision fraction to pool thickness string
         function getThicknessString(fraction) {
             if (fraction >= 0.92) return "정면 (100% 두께)";
             if (fraction >= 0.80) return "5/6 두께 (83%)";
@@ -512,7 +567,7 @@
                 },
                 {
                     id: "int_back",
-                    name: "뒤돌려치기 (Inside Angle / Hak)",
+                    name: "뒤돌려치기 (Inside Angle)",
                     desc: "당구의 기본 꽃이라 불리는 뒤돌려치기 배치입니다. 1적구의 오른쪽을 정교하게 비껴친 후, 긴 우측 쿠션을 타고 꺾여 내려와 먼 코너에 고립된 2적구를 타격하도록 유도합니다.",
                     thickness: "좌측 1/3 두께 (33%)",
                     speed: "자연스럽게 탄성 굴리기 (속도 3.2)",
@@ -680,9 +735,68 @@
             hasHitRed1 = false;
             hasHitRed2 = false;
             hasHitOpponent = false;
-            shotStatusText = "배치 준비 완료! 수구를 드래그해 샷을 성공시키세요.";
             
+            hasShotOnCurrentLayout = false; // Show guideline initially when layout is loaded
+            
+            shotStatusText = `${currentTrial}회 도전 중! 수구를 드래그해 샷을 성공시키세요.`;
             updateScoreboardDOM();
+
+            // Cache initial states immediately
+            cacheBallStates();
+        }
+
+        function cacheBallStates() {
+            savedBallStates = {
+                trial: currentTrial,
+                score: score,
+                hasShotOnCurrentLayout: hasShotOnCurrentLayout, // Cache first shot tracker state
+                balls: balls.map(b => ({
+                    x: b.x,
+                    y: b.y,
+                    vx: 0,
+                    vy: 0,
+                    color: b.color,
+                    isCue: b.isCue,
+                    type: b.type,
+                    spinX: b.spinX,
+                    spinY: b.spinY
+                }))
+            };
+        }
+
+        function restoreLastShotState() {
+            // Cancel automatic layout progression if reset is triggered during transition
+            if (nextTrialTimeoutId) {
+                clearTimeout(nextTrialTimeoutId);
+                nextTrialTimeoutId = null;
+            }
+
+            if (savedBallStates && savedBallStates.balls && savedBallStates.balls.length > 0) {
+                balls = savedBallStates.balls.map(s => {
+                    const b = new Ball(s.x, s.y, s.color, s.isCue, s.type);
+                    b.vx = 0;
+                    b.vy = 0;
+                    b.spinX = s.spinX;
+                    b.spinY = s.spinY;
+                    return b;
+                });
+                
+                // Revert game progress indicators to match the cached moment
+                currentTrial = savedBallStates.trial;
+                score = savedBallStates.score;
+                
+                hasShotOnCurrentLayout = savedBallStates.hasShotOnCurrentLayout; // Restore first shot state tracker
+
+                shotActive = false;
+                hasHitRed1 = false;
+                hasHitRed2 = false;
+                hasHitOpponent = false;
+                shotStatusText = "이전 샷 직전의 완벽한 상태로 원복되었습니다! 다시 조준하여 치세요.";
+                updateScoreboardDOM();
+                showToast('샷 복구 완료!', '방금 전 샷 직전의 공 위치와 점수 상태로 복원되었습니다.');
+            } else {
+                setupTable();
+            }
         }
 
         function checkCollisions() {
@@ -777,7 +891,6 @@
             }
         }
 
-        // Global Window bindings for Drag calculations ensuring Cue dragging can be fully pulled from anywhere
         function getCanvasMousePos(evt) {
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -792,7 +905,9 @@
             };
         }
 
-        canvas.addEventListener('mousedown', (evt) => {
+        // Global Drag handlers (Extended to window target for seamless edge dragging)
+        function handleDragStart(evt) {
+            if (gameEnded) return;
             initAudio();
             const pos = getCanvasMousePos(evt);
             const cue = balls[0];
@@ -800,7 +915,10 @@
             const dy = pos.y - cue.y;
             const dist = Math.sqrt(dx*dx + dy*dy);
 
-            if (dist < 40 && cue.vx === 0 && cue.vy === 0) {
+            if (dist < 45 && cue.vx === 0 && cue.vy === 0) {
+                // Pre-cache exactly before releasing energy
+                cacheBallStates();
+                
                 cueStick.active = true;
                 cueStick.startX = cue.x;
                 cueStick.startY = cue.y;
@@ -808,16 +926,16 @@
                 cueStick.currentY = pos.y;
                 evt.preventDefault();
             }
-        });
+        }
 
-        window.addEventListener('mousemove', (evt) => {
+        function handleDragMove(evt) {
             if (!cueStick.active) return;
             const pos = getCanvasMousePos(evt);
             cueStick.currentX = pos.x;
             cueStick.currentY = pos.y;
-        });
+        }
 
-        window.addEventListener('mouseup', () => {
+        function handleDragEnd() {
             if (!cueStick.active) return;
             cueStick.active = false;
 
@@ -840,86 +958,137 @@
                 cue.spinX = currentSpinX;
                 cue.spinY = currentSpinY;
                 shotActive = true;
+                
+                hasShotOnCurrentLayout = true; // Turn off guidelines since the player has taken their first shot
+                
                 hasHitRed1 = false;
                 hasHitRed2 = false;
                 hasHitOpponent = false;
-                shotStatusText = "분석 진행 중...";
+                shotStatusText = "샷 발사! 수구 궤적 분석 중...";
                 updateScoreboardDOM();
                 playCollisionSound(speed);
             }
-        });
+        }
 
-        // Touch support
-        canvas.addEventListener('touchstart', (evt) => {
-            const pos = getCanvasMousePos(evt);
-            const cue = balls[0];
-            const dx = pos.x - cue.x;
-            const dy = pos.y - cue.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
+        canvas.addEventListener('mousedown', handleDragStart);
+        window.addEventListener('mousemove', handleDragMove);
+        window.addEventListener('mouseup', handleDragEnd);
 
-            if (dist < 40 && cue.vx === 0 && cue.vy === 0) {
-                cueStick.active = true;
-                cueStick.startX = cue.x;
-                cueStick.startY = cue.y;
-                cueStick.currentX = pos.x;
-                cueStick.currentY = pos.y;
-                evt.preventDefault();
-            }
-        }, { passive: false });
-
-        window.addEventListener('touchmove', (evt) => {
-            if (!cueStick.active) return;
-            const pos = getCanvasMousePos(evt);
-            cueStick.currentX = pos.x;
-            cueStick.currentY = pos.y;
-        });
-
-        window.addEventListener('touchend', () => {
-            if (!cueStick.active) return;
-            cueStick.active = false;
-
-            const cue = balls[0];
-            const dx = cueStick.startX - cueStick.currentX;
-            const dy = cueStick.startY - cueStick.currentY;
-
-            const force = 0.22;
-            cue.vx = dx * force;
-            cue.vy = dy * force;
-
-            const speed = Math.sqrt(cue.vx * cue.vx + cue.vy * cue.vy);
-            const MAX_SPEED = 18;
-            if (speed > MAX_SPEED) {
-                cue.vx = (cue.vx / speed) * MAX_SPEED;
-                cue.vy = (cue.vy / speed) * MAX_SPEED;
-            }
-
-            if (speed > 1) {
-                cue.spinX = currentSpinX;
-                cue.spinY = currentSpinY;
-                shotActive = true;
-                hasHitRed1 = false;
-                hasHitRed2 = false;
-                hasHitOpponent = false;
-                shotStatusText = "분석 진행 중...";
-                updateScoreboardDOM();
-                playCollisionSound(speed);
-            }
-        });
+        canvas.addEventListener('touchstart', handleDragStart, { passive: false });
+        window.addEventListener('touchmove', handleDragMove);
+        window.addEventListener('touchend', handleDragEnd);
 
         function evaluateShot() {
             shotActive = false;
+            
+            const currentList = LAYOUT_DATABASE[currentHandicap] || LAYOUT_DATABASE.intermediate;
+            const layout = currentList.find(l => l.id === currentLayoutId) || currentList[0];
+
             if (hasHitRed1 && hasHitRed2 && !hasHitOpponent) {
                 score++;
-                shotStatusText = "🎉 득점 성공! 역시 완벽한 한 큐였습니다!";
-                showToast('득점 성공! 🎉', '정석 설계를 실전에 그대로 적용하셨군요! +1점');
-            } else if (hasHitOpponent) {
-                shotStatusText = "❌ 파울! 노란색 수구를 건드려 감점 대상입니다.";
-                showToast('파울! ❌', '상대 수구를 건드리는 파울을 범했습니다.');
+                shotStatusText = `🎉 득점 성공! (${currentTrial}회 완료). 잠시 후 다음 도전으로 진행됩니다...`;
+                showToast('득점 성공! 🎉', '정밀 설계가 완벽하게 들어맞았습니다! +1점');
             } else {
-                shotStatusText = "😢 실패. 정석 가이드라인의 당점과 힘 조절을 참고해보세요.";
-                showToast('실패 😢', '아쉽게도 두 개의 적구를 다 맞추지 못했습니다.');
+                // Add to missed layouts array
+                if (!missedLayouts.some(item => item.id === layout.id)) {
+                    missedLayouts.push(layout);
+                }
+                
+                if (hasHitOpponent) {
+                    shotStatusText = `❌ 황색 공 터치 파울! (${currentTrial}회 완료). 잠시 후 다음 도전으로 진행됩니다...`;
+                    showToast('파울! ❌', '상대 수구를 건드려 득점에 실패했습니다.');
+                } else {
+                    shotStatusText = `😢 실패! (${currentTrial}회 완료). 잠시 후 다음 도전으로 진행됩니다...`;
+                    showToast('실패 😢', '아쉽게도 두 적구를 전부 맞추지 못했습니다.');
+                }
             }
+
             updateScoreboardDOM();
+            
+            // Auto-advance to the next trial after a brief 2-second delay
+            nextTrialTimeoutId = setTimeout(advanceTrial, 2200);
+        }
+
+        function advanceTrial() {
+            nextTrialTimeoutId = null;
+
+            if (currentTrial >= 10) {
+                endTrainingGame();
+            } else {
+                currentTrial++;
+                // 공의 현재 멈춘 위치를 그대로 유지한 상태에서 다음 도전을 연이어 진행합니다.
+                prepareNextTrialKeepPositions();
+            }
+        }
+
+        function prepareNextTrialKeepPositions() {
+            // 모든 공 완전 정지 및 스핀 초기화
+            balls.forEach(b => {
+                b.vx = 0;
+                b.vy = 0;
+                b.spinX = 0;
+                b.spinY = 0;
+            });
+
+            hasHitRed1 = false;
+            hasHitRed2 = false;
+            hasHitOpponent = false;
+            shotActive = false;
+
+            shotStatusText = `${currentTrial}회 도전 중! 현재 공들이 멈춘 위치에서 다음 연속 샷을 이어가세요.`;
+            updateScoreboardDOM();
+
+            // 현재 멈춘 안착 상태를 '새 턴의 샷 복구' 기준점으로 캐싱
+            cacheBallStates();
+        }
+
+        function endTrainingGame() {
+            gameEnded = true;
+            document.getElementById('modal-final-score').textContent = `${score} / 10 점`;
+            
+            const carousel = document.getElementById('missed-carousel');
+            carousel.innerHTML = '';
+
+            if (missedLayouts.length === 0) {
+                carousel.innerHTML = `
+                    <div class="w-full text-center py-6 bg-billiard-deep/40 rounded-xl border border-billiard-gold/20">
+                        <p class="text-billiard-gold font-bold text-sm">🎉 와우! 10회 완벽 성공!</p>
+                        <p class="text-xs text-gray-400 mt-1">단 하나의 배치도 놓치지 않았습니다. 대단한 수지 실력이십니다.</p>
+                    </div>
+                `;
+            } else {
+                missedLayouts.forEach(layout => {
+                    const card = document.createElement('div');
+                    card.className = "min-w-[260px] md:min-w-[300px] bg-billiard-deep/80 border border-billiard-bright/50 p-4 rounded-2xl snap-start flex flex-col justify-between shadow-lg space-y-3";
+                    card.innerHTML = `
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 bg-red-950 text-red-400 text-[10px] font-bold rounded-full mb-2 border border-red-800/40">오답 복습</span>
+                            <h5 class="font-serif font-bold text-sm text-billiard-ivory mb-1">${layout.name}</h5>
+                            <p class="text-[11px] text-gray-400 line-clamp-3 leading-relaxed">${layout.desc}</p>
+                        </div>
+                        <div class="border-t border-billiard-bright/30 pt-2.5 flex justify-between items-center text-[10px] text-billiard-gold">
+                            <span>두께: ${layout.thickness}</span>
+                            <span>당점: ${layout.spinTip}</span>
+                        </div>
+                    `;
+                    carousel.appendChild(card);
+                });
+            }
+
+            document.getElementById('game-over-modal').classList.remove('hidden');
+        }
+
+        function restartGame() {
+            if (nextTrialTimeoutId) {
+                clearTimeout(nextTrialTimeoutId);
+                nextTrialTimeoutId = null;
+            }
+            score = 0;
+            currentTrial = 1;
+            missedLayouts = [];
+            gameEnded = false;
+            document.getElementById('game-over-modal').classList.add('hidden');
+            setupTable();
         }
 
         function resizeCanvas() {
@@ -939,7 +1108,7 @@
             ctx.stroke();
 
             const guidelineActive = document.getElementById('guideline-toggle').checked;
-            if (guidelineActive) {
+            if (guidelineActive && !hasShotOnCurrentLayout) { // Render guidelines only if no shots have been played yet
                 const currentList = LAYOUT_DATABASE[currentHandicap] || LAYOUT_DATABASE.intermediate;
                 const activeLayout = currentList.find(l => l.id === currentLayoutId) || currentList[0];
 
@@ -983,7 +1152,6 @@
                 const dy = cueStick.startY - cueStick.currentY;
                 const len = Math.sqrt(dx*dx + dy*dy);
 
-                // 실시간 샷 세기 계산 및 게이지 업데이트 (MAX_SPEED 18에 매핑되는 82px)
                 const maxPull = 82;
                 const powerPct = Math.min(Math.round((len / maxPull) * 100), 100);
                 
@@ -997,12 +1165,10 @@
                     const ux = dx / len;
                     const uy = dy / len;
 
-                    // 1. Raycasting for Ghost Ball Intersection
                     let minT = Infinity;
                     let collisionTarget = null;
                     let collisionType = '';
 
-                    // Ball Collision Check (Minkowski sweep check)
                     for (let i = 1; i < balls.length; i++) {
                         const target = balls[i];
                         const vx = cue.x - target.x;
@@ -1022,7 +1188,6 @@
                         }
                     }
 
-                    // Wall Collision Check (To limit ray bounds)
                     if (ux < 0) {
                         const t = (BALL_RADIUS - cue.x) / ux;
                         if (t > 0 && t < minT) { minT = t; collisionTarget = 'left'; collisionType = 'wall'; }
@@ -1040,7 +1205,6 @@
                         if (t > 0 && t < minT) { minT = t; collisionTarget = 'bottom'; collisionType = 'wall'; }
                     }
 
-                    // 2. Render Aiming Guideline up to collision point
                     const renderT = minT !== Infinity ? minT : 1000;
                     ctx.beginPath();
                     ctx.moveTo(cue.x, cue.y);
@@ -1051,12 +1215,10 @@
                     ctx.stroke();
                     ctx.setLineDash([]);
 
-                    // 3. Render Ghost Ball & Thickness Label
                     if (minT !== Infinity) {
                         const gx = cue.x + ux * minT;
                         const gy = cue.y + uy * minT;
 
-                        // Ghost Ball drawing
                         ctx.beginPath();
                         ctx.arc(gx, gy, BALL_RADIUS, 0, Math.PI * 2);
                         ctx.strokeStyle = 'rgba(251, 250, 245, 0.55)';
@@ -1065,28 +1227,24 @@
                         ctx.stroke();
                         ctx.setLineDash([]);
 
-                        // Center indicator of Ghost ball
                         ctx.beginPath();
                         ctx.arc(gx, gy, 2, 0, Math.PI * 2);
                         ctx.fillStyle = 'rgba(251, 250, 245, 0.8)';
                         ctx.fill();
 
                         if (collisionType === 'ball' && collisionTarget) {
-                            // Calculate thickness
                             const d = Math.abs((collisionTarget.x - cue.x) * (-uy) + (collisionTarget.y - cue.y) * ux);
                             const fraction = 1 - (d / (2 * BALL_RADIUS));
                             const thicknessStr = getThicknessString(fraction);
 
-                            // Label Styling
                             ctx.font = '11px Inter, Noto Sans KR, sans-serif';
                             ctx.fillStyle = '#d4af37';
                             ctx.shadowColor = 'rgba(0,0,0,0.8)';
                             ctx.shadowBlur = 4;
                             ctx.textAlign = 'center';
                             ctx.fillText(thicknessStr, gx, gy - BALL_RADIUS - 8);
-                            ctx.shadowBlur = 0; // reset
+                            ctx.shadowBlur = 0;
 
-                            // Intersect/Cut tangent pointer line
                             ctx.beginPath();
                             ctx.moveTo(gx, gy);
                             ctx.lineTo(collisionTarget.x, collisionTarget.y);
@@ -1096,7 +1254,6 @@
                         }
                     }
 
-                    // Draw Cue Stick body extending backwards
                     ctx.beginPath();
                     ctx.moveTo(cue.x - ux * 25, cue.y - uy * 25);
                     ctx.lineTo(cue.x - ux * (25 + Math.min(len, 100) + 200), cue.y - uy * (25 + Math.min(len, 100) + 200));
@@ -1115,7 +1272,6 @@
                     ctx.stroke();
                 }
             } else {
-                // 드래그가 활성화되어 있지 않을 때는 파워 게이지 초기화
                 document.getElementById('power-bar-fill').style.width = `0%`;
                 document.getElementById('power-pointer').style.display = 'none';
                 document.getElementById('power-value-text').textContent = `파워: 0%`;
@@ -1162,9 +1318,14 @@
             animate();
         };
 
+        // Reset Table Button uses Undo system
         document.getElementById('reset-table-btn').addEventListener('click', () => {
-            setupTable();
-            showToast('테이블 리셋!', '현재 선택된 4구 배치가 깨끗하게 리마운트되었습니다.');
+            restoreLastShotState();
+        });
+
+        // Restart trigger on Modal
+        document.getElementById('restart-game-btn').addEventListener('click', () => {
+            restartGame();
         });
 
         const soundBtn = document.getElementById('sound-toggle-btn');
