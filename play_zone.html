@@ -104,6 +104,28 @@
                             <canvas id="billiardCanvas" class="block mx-auto max-w-full cursor-crosshair"></canvas>
                         </div>
                     </div>
+
+                    <!-- 샷 세기 실시간 게이지 (Shot Power Gauge) -->
+                    <div class="bg-billiard-cloth/30 border border-billiard-bright/50 p-5 rounded-2xl shadow-lg">
+                        <div class="flex justify-between items-center mb-2 text-xs">
+                            <span class="font-bold text-billiard-gold tracking-wider uppercase flex items-center">
+                                <i class="fa-solid fa-gauge-high mr-2 text-sm text-billiard-gold animate-pulse"></i>
+                                샷 세기 게이지 (Shot Power Gauge)
+                            </span>
+                            <span id="power-value-text" class="font-mono text-billiard-gold font-bold bg-billiard-deep/60 px-2.5 py-1 rounded border border-billiard-bright/40">파워: 0%</span>
+                        </div>
+                        <div class="relative w-full h-6 rounded-full bg-billiard-deep overflow-hidden border border-billiard-bright/40 shadow-inner">
+                            <!-- Gradient Fill Area -->
+                            <div id="power-bar-fill" class="h-full w-0 rounded-full" style="background: linear-gradient(to right, #10b981 0%, #fbbf24 50%, #ef4444 100%); transition: width 0.05s ease-out;"></div>
+                            <!-- Dynamic indicator line -->
+                            <div id="power-pointer" class="absolute top-0 bottom-0 w-1.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" style="left: 0%; transform: translateX(-50%); display: none; transition: left 0.05s ease-out;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-gray-400 mt-1.5 px-1 font-medium tracking-wider">
+                            <span>낮음 (Low)</span>
+                            <span>중간 (Medium)</span>
+                            <span>높음 (High)</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Right Controller Panels -->
@@ -919,6 +941,16 @@
                 const dy = cueStick.startY - cueStick.currentY;
                 const len = Math.sqrt(dx*dx + dy*dy);
 
+                // 실시간 샷 세기 계산 및 게이지 업데이트 (MAX_SPEED 18에 매핑되는 82px)
+                const maxPull = 82;
+                const powerPct = Math.min(Math.round((len / maxPull) * 100), 100);
+                
+                document.getElementById('power-bar-fill').style.width = `${powerPct}%`;
+                const pointer = document.getElementById('power-pointer');
+                pointer.style.left = `${powerPct}%`;
+                pointer.style.display = 'block';
+                document.getElementById('power-value-text').textContent = `파워: ${powerPct}%`;
+
                 if (len > 5) {
                     const ux = dx / len;
                     const uy = dy / len;
@@ -949,6 +981,11 @@
                     ctx.lineCap = 'round';
                     ctx.stroke();
                 }
+            } else {
+                // 드래그가 활성화되어 있지 않을 때는 파워 게이지 초기화
+                document.getElementById('power-bar-fill').style.width = `0%`;
+                document.getElementById('power-pointer').style.display = 'none';
+                document.getElementById('power-value-text').textContent = `파워: 0%`;
             }
 
             if (shotActive) {
