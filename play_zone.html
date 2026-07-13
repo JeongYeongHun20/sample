@@ -68,7 +68,7 @@
                 <span class="text-billiard-gold font-serif italic text-lg">Interactive Training</span>
                 <h2 class="text-3xl md:text-4xl font-bold font-serif">당구 수지별 4구 정석 배치 훈련소</h2>
                 <p class="text-gray-300 text-sm md:text-base">
-                    자신의 평소 당구 수지(핸디캡)를 선택하고 맞춤 연습 배치를 해결해보세요! 총 10회의 도전 기회가 주어지며, 정석 해설을 읽어보고 가이드라인을 따라가며 완벽한 각도의 알고리즘을 설계해 봅니다.
+                    자신의 평소 당구 수지(핸디캡)를 선택하고 맞춤 연습 배치를 해결해보세요! 총 3번의 실패 기회가 주어지며, 정석 해설을 읽어보고 가이드라인을 따라가며 완벽한 각도의 알고리즘을 설계해 봅니다.
                 </p>
             </div>
 
@@ -122,8 +122,10 @@
                             </div>
                             <div class="h-8 w-[1px] bg-billiard-bright/60 hidden sm:block"></div>
                             <div>
-                                <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium">Trial Progress</span>
-                                <span id="html-inning-val" class="text-xl font-bold font-mono text-billiard-gold">1 / 10 회 도전</span>
+                                <span class="block text-[10px] text-gray-400 uppercase tracking-widest font-medium mb-1">남은 기회 (Opportunities)</span>
+                                <div id="html-lives-container" class="flex items-center space-x-1.5">
+                                    <!-- Dynamic Glossy Billiard Ball Lives will be injected here -->
+                                </div>
                             </div>
                         </div>
                         <div class="w-full sm:flex-1 max-w-md bg-billiard-deep/50 border border-billiard-bright/40 px-4 py-2.5 rounded-xl text-center sm:text-left flex items-center justify-between gap-2">
@@ -212,7 +214,7 @@
                             <div id="spin-selector" class="relative w-24 h-24 rounded-full bg-billiard-ivory border-[3px] border-billiard-gold cursor-crosshair flex items-center justify-center shadow-inner">
                                 <div class="absolute w-full h-[1px] bg-gray-300 pointer-events-none"></div>
                                 <div class="absolute h-full w-[1px] bg-gray-300 pointer-events-none"></div>
-                                <!-- Red Dot Selector Point (Corrected standard Tailwind classes) -->
+                                <!-- Red Dot Selector Point -->
                                 <div id="spin-dot" class="absolute w-4 h-4 rounded-full bg-red-600 border border-white shadow-md pointer-events-none transition-all duration-75" style="left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>
                             </div>
                         </div>
@@ -241,15 +243,15 @@
         </div>
     </section>
 
-    <!-- 10-Inning Game Over Modal with Carousel -->
+    <!-- 3-Lives Game Over Modal with Carousel -->
     <div id="game-over-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
         <div class="bg-billiard-cloth border-2 border-billiard-gold/60 p-6 md:p-8 rounded-3xl max-w-2xl w-full text-center space-y-6 shadow-2xl overflow-hidden relative">
-            <h3 class="text-2xl md:text-3xl font-bold font-serif text-billiard-gold"><i class="fa-solid fa-trophy mr-2"></i>10회 도전 완료!</h3>
-            <p class="text-sm text-gray-300">정해진 10번의 도전을 모두 마쳤습니다. 최종 성적을 검토해 보세요.</p>
+            <h3 class="text-2xl md:text-3xl font-bold font-serif text-billiard-gold"><i class="fa-solid fa-circle-exclamation mr-2 animate-bounce"></i>모든 기회 소진 (도전 종료!)</h3>
+            <p class="text-sm text-gray-300">3번의 실패 기회를 모두 소진했습니다. 최종 달성 성적을 검토하고 명예의 전당에 등극해보세요.</p>
             
             <div class="inline-block bg-billiard-deep/80 border border-billiard-bright px-8 py-4 rounded-2xl">
                 <span class="block text-[10px] text-gray-400 uppercase tracking-widest">Final Score</span>
-                <span id="modal-final-score" class="text-4xl font-extrabold font-mono text-billiard-gold">0 / 10 점</span>
+                <span id="modal-final-score" class="text-4xl font-extrabold font-mono text-billiard-gold">0 점</span>
             </div>
 
             <!-- 랭킹 등록 폼 -->
@@ -464,7 +466,7 @@
         const BALL_RADIUS = 15;
         
         let balls = [];
-        let savedBallStates = null; // Cache to restore prior states (trial, score, ball positions)
+        let savedBallStates = null; // Cache to restore prior states (lives, score, ball positions)
         let cueStick = {
             active: false,
             startX: 0,
@@ -473,9 +475,10 @@
             currentY: 0
         };
 
-        // 10-Trial Game Logic Variables
+        // 3-Lives Game Logic Variables
         let score = 0;
-        let currentTrial = 1;
+        const MAX_LIVES = 3;
+        let lives = MAX_LIVES;
         let missedLayouts = [];
         let gameEnded = false;
         let nextTrialTimeoutId = null;
@@ -488,12 +491,31 @@
         
         let hasShotOnCurrentLayout = false; // Tracks if a shot has been played on the current layout
 
+        function updateLivesUI() {
+            const container = document.getElementById('html-lives-container');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let i = 0; i < MAX_LIVES; i++) {
+                const ball = document.createElement('div');
+                if (i < lives) {
+                    // Active glossy red billiard ball
+                    ball.className = "w-5 h-5 rounded-full bg-red-600 shadow-[inset_-3px_-3px_6px_rgba(0,0,0,0.6),_0_2px_4px_rgba(0,0,0,0.3)] border border-red-700 relative transition-all duration-300 transform scale-100";
+                    // Add a tiny white glossy highlight spot
+                    const highlight = document.createElement('div');
+                    highlight.className = "absolute top-1 left-1 w-1 h-1 bg-white rounded-full opacity-70";
+                    ball.appendChild(highlight);
+                } else {
+                    // Empty/faded gray placeholder ball
+                    ball.className = "w-5 h-5 rounded-full bg-gray-800 border border-gray-700 opacity-30 transition-all duration-300 transform scale-90";
+                }
+                container.appendChild(ball);
+            }
+        }
+
         function updateScoreboardDOM() {
             const scoreEl = document.getElementById('html-score-val');
-            const inningEl = document.getElementById('html-inning-val');
             const statusEl = document.getElementById('html-status-text');
             if (scoreEl) scoreEl.textContent = `${score} 점`;
-            if (inningEl) inningEl.textContent = `${currentTrial} / 10 회 도전`;
             if (statusEl) statusEl.textContent = shotStatusText;
         }
 
@@ -747,8 +769,9 @@
             
             hasShotOnCurrentLayout = false; // Show guideline initially when layout is loaded
             
-            shotStatusText = `${currentTrial}회 도전 중! 수구를 드래그해 샷을 성공시키세요.`;
+            shotStatusText = "신중하게 조준하여 득점 콤보를 만들어보세요!";
             updateScoreboardDOM();
+            updateLivesUI();
 
             // Cache initial states immediately
             cacheBallStates();
@@ -756,7 +779,7 @@
 
         function cacheBallStates() {
             savedBallStates = {
-                trial: currentTrial,
+                lives: lives,
                 score: score,
                 hasShotOnCurrentLayout: hasShotOnCurrentLayout, // Cache first shot tracker state
                 balls: balls.map(b => ({
@@ -790,19 +813,18 @@
                     return b;
                 });
                 
-                // Revert game progress indicators to match the cached moment
-                currentTrial = savedBallStates.trial;
+                lives = savedBallStates.lives;
                 score = savedBallStates.score;
-                
                 hasShotOnCurrentLayout = savedBallStates.hasShotOnCurrentLayout; // Restore first shot state tracker
 
                 shotActive = false;
                 hasHitRed1 = false;
                 hasHitRed2 = false;
                 hasHitOpponent = false;
-                shotStatusText = "이전 샷 직전의 완벽한 상태로 원복되었습니다! 다시 조준하여 치세요.";
+                shotStatusText = "이전 샷 직전 상태로 완벽히 복원되었습니다! 다시 조준해 보세요.";
                 updateScoreboardDOM();
-                showToast('샷 복구 완료!', '방금 전 샷 직전의 공 위치와 점수 상태로 복원되었습니다.');
+                updateLivesUI();
+                showToast('샷 복구 완료!', '방금 전 샷 직전의 공 위치와 기회 상태로 복원되었습니다.');
             } else {
                 setupTable();
             }
@@ -914,7 +936,6 @@
             };
         }
 
-        // Global Drag handlers (Extended to window target for seamless edge dragging)
         function handleDragStart(evt) {
             if (gameEnded) return;
             initAudio();
@@ -995,43 +1016,37 @@
 
             if (hasHitRed1 && hasHitRed2 && !hasHitOpponent) {
                 score++;
-                shotStatusText = `🎉 득점 성공! (${currentTrial}회 완료). 잠시 후 다음 도전으로 진행됩니다...`;
-                showToast('득점 성공! 🎉', '정밀 설계가 완벽하게 들어맞았습니다! +1점');
+                shotStatusText = `🎉 득점 성공! 기회가 유지됩니다. 계속해서 다음 샷을 이어가세요!`;
+                showToast('득점 성공! 🎉', '정밀 설계가 완벽하게 들어맞았습니다! 목숨이 보호됩니다. +1점');
             } else {
-                // Add to missed layouts array
+                lives--;
+                // Add to missed layouts array for the error handbook
                 if (!missedLayouts.some(item => item.id === layout.id)) {
                     missedLayouts.push(layout);
                 }
                 
                 if (hasHitOpponent) {
-                    shotStatusText = `❌ 황색 공 터치 파울! (${currentTrial}회 완료). 잠시 후 다음 도전으로 진행됩니다...`;
-                    showToast('파울! ❌', '상대 수구를 건드려 득점에 실패했습니다.');
+                    shotStatusText = `❌ 황색 공 터치 파울! 기회가 1회 차감되었습니다.`;
+                    showToast('파울! ❌', '상대 수구를 먼저 건드려 기회가 1회 차감되었습니다.');
                 } else {
-                    shotStatusText = `😢 실패! (${currentTrial}회 완료). 잠시 후 다음 도전으로 진행됩니다...`;
-                    showToast('실패 😢', '아쉽게도 두 적구를 전부 맞추지 못했습니다.');
+                    shotStatusText = `😢 실패! 기회가 1회 차감되었습니다.`;
+                    showToast('실패 😢', '아쉽게도 두 적구를 전부 맞추지 못해 기회가 1회 차감되었습니다.');
                 }
             }
 
             updateScoreboardDOM();
+            updateLivesUI();
             
-            // Auto-advance to the next trial after a brief 2-second delay
-            nextTrialTimeoutId = setTimeout(advanceTrial, 2200);
-        }
-
-        function advanceTrial() {
-            nextTrialTimeoutId = null;
-
-            if (currentTrial >= 10) {
-                endTrainingGame();
+            // Check if game has ended
+            if (lives <= 0) {
+                nextTrialTimeoutId = setTimeout(endTrainingGame, 2200);
             } else {
-                currentTrial++;
-                // 공의 현재 멈춘 위치를 그대로 유지한 상태에서 다음 도전을 연이어 진행합니다.
-                prepareNextTrialKeepPositions();
+                nextTrialTimeoutId = setTimeout(prepareNextTrialKeepPositions, 2200);
             }
         }
 
         function prepareNextTrialKeepPositions() {
-            // 모든 공 완전 정지 및 스핀 초기화
+            // Stop all ball movements
             balls.forEach(b => {
                 b.vx = 0;
                 b.vy = 0;
@@ -1044,16 +1059,16 @@
             hasHitOpponent = false;
             shotActive = false;
 
-            shotStatusText = `${currentTrial}회 도전 중! 현재 공들이 멈춘 위치에서 다음 연속 샷을 이어가세요.`;
+            shotStatusText = "현재 공들이 멈춰선 자리 그대로, 다음 샷을 계속 진행하세요!";
             updateScoreboardDOM();
 
-            // 현재 멈춘 안착 상태를 '새 턴의 샷 복구' 기준점으로 캐싱
+            // Cache current state as the baseline undo point for the new turn
             cacheBallStates();
         }
 
         function endTrainingGame() {
             gameEnded = true;
-            document.getElementById('modal-final-score').textContent = `${score} / 10 점`;
+            document.getElementById('modal-final-score').textContent = `${score} 점`;
             
             const carousel = document.getElementById('missed-carousel');
             carousel.innerHTML = '';
@@ -1061,8 +1076,8 @@
             if (missedLayouts.length === 0) {
                 carousel.innerHTML = `
                     <div class="w-full text-center py-6 bg-billiard-deep/40 rounded-xl border border-billiard-gold/20">
-                        <p class="text-billiard-gold font-bold text-sm">🎉 와우! 10회 완벽 성공!</p>
-                        <p class="text-xs text-gray-400 mt-1">단 하나의 배치도 놓치지 않았습니다. 대단한 수지 실력이십니다.</p>
+                        <p class="text-billiard-gold font-bold text-sm">🎉 와우! 완벽한 당구 실력!</p>
+                        <p class="text-xs text-gray-400 mt-1">단 하나의 무리수 배치도 없이 기회를 철저하게 지켜내셨습니다.</p>
                     </div>
                 `;
             } else {
@@ -1093,14 +1108,14 @@
                 nextTrialTimeoutId = null;
             }
             score = 0;
-            currentTrial = 1;
+            lives = MAX_LIVES;
             missedLayouts = [];
             gameEnded = false;
             document.getElementById('game-over-modal').classList.add('hidden');
             setupTable();
+            updateLivesUI();
         }
 
-        // 랭킹 등록 이벤트 리스너 추가
         document.getElementById('submit-ranking-btn').addEventListener('click', () => {
             const nameInput = document.getElementById('rank-name-input');
             const nickname = nameInput.value.trim();
@@ -1110,10 +1125,9 @@
                 return;
             }
 
-            // 로컬 스토리지 기존 랭킹 로드
+            // Load existing list
             let currentRankings = JSON.parse(localStorage.getItem('billiard_rankings')) || [];
             
-            // 난이도 이름 한글 변환
             let handicapKo = "중급자";
             if (currentHandicap === "beginner") handicapKo = "초급자";
             if (currentHandicap === "advanced") handicapKo = "상급자";
@@ -1127,17 +1141,13 @@
             };
 
             currentRankings.push(newRecord);
-            
-            // 점수 기준 내림차순 정렬 (점수가 같으면 최근 등록일 순)
             currentRankings.sort((a, b) => b.score - a.score || b.id - a.id);
 
-            // 로컬 스토리지에 보존
             localStorage.setItem('billiard_rankings', JSON.stringify(currentRankings));
 
             showToast('랭킹 등록 완료!', '명예의 전당 랭킹 페이지로 이동합니다.');
             nameInput.value = '';
 
-            // 1초 뒤 랭킹 페이지로 전환
             setTimeout(() => {
                 window.location.href = 'ranking.html';
             }, 1000);
@@ -1154,14 +1164,12 @@
             if (userStr) {
                 const user = JSON.parse(userStr);
                 
-                // 로그인된 유저의 핸디캡을 셀렉트 박스에 매핑
                 const handicapSelect = document.getElementById('handicap-select');
                 if (handicapSelect) {
                     handicapSelect.value = user.handicap;
                     currentHandicap = user.handicap;
                 }
                 
-                // 최종 모달 창의 닉네임 폼에 자동 입력 처리
                 const rankNameInput = document.getElementById('rank-name-input');
                 if (rankNameInput) {
                     rankNameInput.value = user.name;
@@ -1180,7 +1188,7 @@
             ctx.stroke();
 
             const guidelineActive = document.getElementById('guideline-toggle').checked;
-            if (guidelineActive && !hasShotOnCurrentLayout) { // Render guidelines only if no shots have been played yet
+            if (guidelineActive && !hasShotOnCurrentLayout) { 
                 const currentList = LAYOUT_DATABASE[currentHandicap] || LAYOUT_DATABASE.intermediate;
                 const activeLayout = currentList.find(l => l.id === currentLayoutId) || currentList[0];
 
@@ -1385,8 +1393,8 @@
         });
 
         window.onload = function() {
-            checkUserProfile(); // 1. 로그인 상태 확인 및 수지 사전 동기화
-            updatePresetDropdown(); // 2. 수지에 맞는 배치 프리셋 바인딩
+            checkUserProfile(); 
+            updatePresetDropdown(); 
             resizeCanvas();
             animate();
         };
